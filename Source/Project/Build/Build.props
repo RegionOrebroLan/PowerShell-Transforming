@@ -1,0 +1,35 @@
+<Project>
+	<PropertyGroup Label="Initial">
+		<Company>Region Örebro län</Company>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<VersionPrereleaseName></VersionPrereleaseName>
+	</PropertyGroup>
+	<PropertyGroup Label="Assembly">
+		<AssemblyName>RegionOrebroLan.PowerShell.Transforming</AssemblyName>
+		<AssemblyOriginatorKeyFile>$(SolutionDir).Global\Signing\StrongName.snk</AssemblyOriginatorKeyFile>
+		<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+		<CodeAnalysisRuleSet>CodeAnalysis\Rules.ruleset</CodeAnalysisRuleSet>
+		<DelaySign>false</DelaySign>
+		<Description>PowerShell commands for json-, package- and xml-transformation.</Description>
+		<FileVersion>$(VersionPrefix).0</FileVersion>
+		<RootNamespace>$(AssemblyName)</RootNamespace>
+		<SignAssembly>true</SignAssembly>
+		<TargetFramework>net46</TargetFramework>
+		<Version>$(VersionPrefix)</Version>
+		<Version Condition="$(VersionPrereleaseName) != ''">$(Version)-$(VersionPrereleaseName)</Version>
+	</PropertyGroup>
+	<PropertyGroup Label="NuGet-Package">
+		<Authors>$(Company)</Authors>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<NuspecFile>Project.nuspec</NuspecFile>
+		<PackageProjectUrl>https://github.com/RegionOrebroLan/PowerShell-Transforming/</PackageProjectUrl>
+		<PackageTags>directory-transform file-transform jdt json json-transform package package-transform powershell transformation transforms xdt xml xml-transform zipfile-transform</PackageTags>
+	</PropertyGroup>
+	<PropertyGroup Label="PowerShell-Module">
+		<PowerShellModuleGuid>eaf64c74-81dc-470f-b8e8-740660cdc516</PowerShellModuleGuid>
+		<PowerShellModuleName>RegionOrebroLan.Transforming</PowerShellModuleName>
+		<!-- The following tags are needed in the NuGet-package to get it working as a PS-Module-package. At least the first tag, PSModule, is required. -->
+		<PowerShellModulePackageRequiredTags>PSModule PSIncludes_Cmdlet PSCmdlet_New-FileTransform PSCmdlet_New-PackageTransform PSCommand_New-FileTransform PSCommand_New-PackageTransform</PowerShellModulePackageRequiredTags>
+	</PropertyGroup>
+</Project>
