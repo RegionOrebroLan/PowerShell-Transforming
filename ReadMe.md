@@ -28,7 +28,7 @@ PowerShell commands for json-, package- and xml-transformation. This library is 
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
-        -FileToTransformPatterns "**\*.config*", "**\*.json", "**\*.xml" `
+        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
         -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
@@ -37,7 +37,7 @@ PowerShell commands for json-, package- and xml-transformation. This library is 
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
-        -FileToTransformPatterns "**\*.config*", "**\*.json", "**\*.xml" `
+        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
         -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
@@ -46,7 +46,7 @@ PowerShell commands for json-, package- and xml-transformation. This library is 
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
-        -FileToTransformPatterns "**\*.config*", "**\*.json", "**\*.xml" `
+        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
         -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
@@ -55,7 +55,7 @@ PowerShell commands for json-, package- and xml-transformation. This library is 
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
-        -FileToTransformPatterns "**\*.config*", "**\*.json", "**\*.xml" `
+        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
         -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
