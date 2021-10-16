@@ -11,7 +11,7 @@
 		<Description>PowerShell commands for json-, package- and xml-transformation.</Description>
 		<FileVersion>$(VersionPrefix).0</FileVersion>
 		<RootNamespace>$(AssemblyName)</RootNamespace>
-		<TargetFramework>net462</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<Version>$(VersionPrefix)</Version>
 		<Version Condition="$(VersionPrereleaseName) != ''">$(Version)-$(VersionPrereleaseName)</Version>
 	</PropertyGroup>
