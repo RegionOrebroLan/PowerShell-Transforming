@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO.Abstractions;
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
