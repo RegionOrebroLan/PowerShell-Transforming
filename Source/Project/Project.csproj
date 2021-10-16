@@ -1,21 +1,108 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="Build\Build.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup Label="Initial">
+		<Company>Region Örebro län</Company>
+		<VersionPrefix>2.0.0</VersionPrefix>
+		<VersionPrereleaseName></VersionPrereleaseName>
+	</PropertyGroup>
+	<PropertyGroup Label="Assembly">
+		<AssemblyName>RegionOrebroLan.PowerShell.Transforming</AssemblyName>
+		<AssemblyOriginatorKeyFile>$(SolutionDir).Global\Signing\StrongName.snk</AssemblyOriginatorKeyFile>
+		<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+		<Description>PowerShell commands for json-, package- and xml-transformation.</Description>
+		<FileVersion>$(VersionPrefix).0</FileVersion>
+		<RootNamespace>$(AssemblyName)</RootNamespace>
+		<TargetFramework>net462</TargetFramework>
+		<Version>$(VersionPrefix)</Version>
+		<Version Condition="$(VersionPrereleaseName) != ''">$(Version)-$(VersionPrereleaseName)</Version>
+	</PropertyGroup>
+	<PropertyGroup Label="NuGet-Package">
+		<Authors>$(Company)</Authors>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<NuspecFile>Project.nuspec</NuspecFile>
+		<PackageProjectUrl>https://github.com/RegionOrebroLan/PowerShell-Transforming/</PackageProjectUrl>
+		<PackageTags>directory-transform file-transform jdt json json-transform package package-transform powershell transformation transforms xdt xml xml-transform zipfile-transform</PackageTags>
+	</PropertyGroup>
+	<PropertyGroup Label="PowerShell-Module">
+		<PowerShellModuleGuid>eaf64c74-81dc-470f-b8e8-740660cdc516</PowerShellModuleGuid>
+		<PowerShellModuleName>RegionOrebroLan.Transforming</PowerShellModuleName>
+		<!-- The following tags are needed in the NuGet-package to get it working as a PS-Module-package. At least the first tag, PSModule, is required. -->
+		<PowerShellModulePackageRequiredTags>PSModule PSIncludes_Cmdlet PSCmdlet_New-FileTransform PSCmdlet_New-PackageTransform PSCommand_New-FileTransform PSCommand_New-PackageTransform</PowerShellModulePackageRequiredTags>
+	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
-			<PrivateAssets>all</PrivateAssets>
+		<PackageReference Include="PowerShellStandard.Library" Version="5.1.0">
+			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
 		<PackageReference Include="RegionOrebroLan.Transforming" Version="2.0.0" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Remove="CodeAnalysis\Dictionary.xml" />
-		<AdditionalFiles Include="CodeAnalysis\Dictionary.xml" />
-		<AdditionalFiles Include="$(SolutionDir).Global\CodeAnalysis\Solution-dictionary.xml">
-			<Link>CodeAnalysis\Solution-dictionary.xml</Link>
-		</AdditionalFiles>
-		<Compile Include="$(SolutionDir).Global\CodeAnalysis\Solution-suppressions.cs">
-			<Link>CodeAnalysis\Solution-suppressions.cs</Link>
-		</Compile>
-	</ItemGroup>
-	<Import Project="Build\Build.targets" />
+	<Target Name="AdditionalCleanup" AfterTargets="Clean" DependsOnTargets="EnsureProperties">
+		<ItemGroup>
+			<_FileToDelete Include="$(PackageOutputPath)**\*.*" />
+		</ItemGroup>
+		<Delete Files="@(_FileToDelete)" />
+		<RemoveDir Directories="$(PowerShellModuleDirectoryPath)" />
+	</Target>
+	<Target Name="BuildPowerShellModuleManifest" BeforeTargets="BeforeBuild" DependsOnTargets="EnsurePowerShellModuleDirectory">
+		<PropertyGroup>
+			<_PowerShellVersion>5.0</_PowerShellVersion>
+		</PropertyGroup>
+		<ItemGroup>
+			<_PowerShellModuleManifestLine Include="@{" />
+			<_PowerShellModuleManifestLine Include="%09Author = %22$(Authors)%22" />
+			<_PowerShellModuleManifestLine Include="%09CompanyName = %22$(Company)%22" />
+			<_PowerShellModuleManifestLine Include="%09Description = %22$(Description)%22" />
+			<_PowerShellModuleManifestLine Include="%09DotNetFrameworkVersion = %22$(TargetFrameworkVersion.Replace('v', ''))%22" />
+			<_PowerShellModuleManifestLine Include="%09GUID = %22$(PowerShellModuleGuid)%22" />
+			<_PowerShellModuleManifestLine Include="%09HelpInfoURI = %22$(PackageProjectUrl)%22" />
+			<_PowerShellModuleManifestLine Include="%09ModuleVersion = %22$(VersionPrefix)%22" />
+			<_PowerShellModuleManifestLine Include="%09PowerShellVersion = %22$(_PowerShellVersion)%22" />
+			<_PowerShellModuleManifestLine Include="%09PrivateData = @{" />
+			<_PowerShellModuleManifestLine Include="%09%09PSData = @{" />
+			<_PowerShellModuleManifestLine Condition="$(VersionPrereleaseName) != ''" Include="%09%09%09Prerelease = %22$(VersionPrereleaseName)%22" />
+			<_PowerShellModuleManifestLine Include="%09%09%09ProjectUri = %22$(PackageProjectUrl)%22" />
+			<_PowerShellModuleManifestLine Include="%09%09%09Tags = %22$(PackageTags.Replace(' ', '%22, %22'))%22" />
+			<_PowerShellModuleManifestLine Include="%09%09}" />
+			<_PowerShellModuleManifestLine Include="%09}" />
+			<_PowerShellModuleManifestLine Include="%09RootModule = %22$(AssemblyName).dll%22" />
+			<_PowerShellModuleManifestLine Include="}" />
+		</ItemGroup>
+		<WriteLinesToFile File="$(PowerShellModuleManifestFilePath)" Lines="@(_PowerShellModuleManifestLine)" Overwrite="true" />
+	</Target>
+	<Target Name="EnsureAdditionalOutput" AfterTargets="Build" DependsOnTargets="EnsurePowerShellModuleDirectory">
+		<Copy DestinationFolder="$(PackageOutputPath)" SourceFiles="Publish-Module.ps1" />
+		<Copy DestinationFolder="$(PackageOutputPath)" SourceFiles="Publish-Module-As-NuGet-Package.ps1" />
+		<ItemGroup>
+			<_AdditionalPowerShellModuleFile Include="$(OutputPath)**\*.dll" />
+			<_AdditionalPowerShellModuleFile Condition="$(Configuration) == 'Debug'" Include="$(OutputPath)**\*.pdb" />
+		</ItemGroup>
+		<Copy DestinationFolder="$(PowerShellModuleDirectoryPath)" SourceFiles="@(_AdditionalPowerShellModuleFile)" />
+	</Target>
+	<Target Name="EnsureNuspecProperties" BeforeTargets="BeforeBuild" DependsOnTargets="BuildPowerShellModuleManifest">
+		<PropertyGroup>
+			<_SymbolFilePattern>$(OutputPath)*.non-existing-file</_SymbolFilePattern>
+			<_SymbolFilePattern Condition="$(Configuration) == 'Debug'">$(OutputPath)*.pdb</_SymbolFilePattern>
+		</PropertyGroup>
+		<PropertyGroup>
+			<NuspecProperties>AssemblyFilePattern=$(OutputPath)*.dll;Authors=$(Authors);Description=$(Description);Id=$(PowerShellModuleName);Owners=$(Company);PowerShellModuleManifestFilePattern=$(PowerShellModuleDirectoryPath)*.psd1;ProjectUrl=$(PackageProjectUrl);SymbolFilePattern=$(_SymbolFilePattern);Tags=$(PackageTags) $(PowerShellModulePackageRequiredTags);TargetFrameworkVersionNumber=$(TargetFrameworkVersionNumber);Version=$(Version)</NuspecProperties>
+		</PropertyGroup>
+	</Target>
+	<Target Name="EnsurePowerShellModuleDirectory" DependsOnTargets="EnsureProperties">
+		<MakeDir Condition="!Exists('$(PowerShellModuleDirectoryPath)')" Directories="$(PowerShellModuleDirectoryPath)" />
+	</Target>
+	<Target Name="EnsureProperties">
+		<PropertyGroup>
+			<PowerShellModuleDirectoryPath>$(PackageOutputPath)$(PowerShellModuleName)\</PowerShellModuleDirectoryPath>
+			<PowerShellModuleManifestFilePath>$(PowerShellModuleDirectoryPath)$(PowerShellModuleName).psd1</PowerShellModuleManifestFilePath>
+			<TargetFrameworkVersionNumber>$(TargetFrameworkVersion.Replace("v", ""))</TargetFrameworkVersionNumber>
+		</PropertyGroup>
+	</Target>
+	<Target Name="HandleAssemblyOriginatorKeyFile" BeforeTargets="BeforeBuild" Condition="$(SignAssembly) AND !Exists('$(AssemblyOriginatorKeyFile)')">
+		<PropertyGroup>
+			<_DevelopmentAssemblyOriginatorKeyFile>$(SolutionDir).Global\Signing\StrongName.Development.snk</_DevelopmentAssemblyOriginatorKeyFile>
+		</PropertyGroup>
+		<Warning Text="The strong-name-key-file '$(AssemblyOriginatorKeyFile)' does not exist. The strong-name-key-file '$(_DevelopmentAssemblyOriginatorKeyFile)' is used instead." />
+		<PropertyGroup>
+			<AssemblyOriginatorKeyFile>$(_DevelopmentAssemblyOriginatorKeyFile)</AssemblyOriginatorKeyFile>
+		</PropertyGroup>
+	</Target>
 </Project>
