@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Management.Automation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,8 +46,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.IntegrationTests
 
 		[ClassCleanup]
 		[CLSCompliant(false)]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "testContext")]
-		public static void Cleanup(TestContext testContext)
+		public static void Cleanup()
 		{
 			DeleteDirectoryIfItExists(_outputDirectoryPath);
 		}
@@ -71,9 +69,11 @@ namespace RegionOrebroLan.PowerShell.Transforming.IntegrationTests
 
 		[ClassInitialize]
 		[CLSCompliant(false)]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "testContext")]
 		public static void Initialize(TestContext testContext)
 		{
+			if(testContext == null)
+				throw new ArgumentNullException(nameof(testContext));
+
 			DeleteDirectoryIfItExists(_outputDirectoryPath);
 		}
 
@@ -86,6 +86,9 @@ namespace RegionOrebroLan.PowerShell.Transforming.IntegrationTests
 		[CLSCompliant(false)]
 		protected internal virtual void InvokeCommand(Cmdlet command)
 		{
+			if(command == null)
+				throw new ArgumentNullException(nameof(command));
+
 			var result = command.Invoke().GetEnumerator();
 
 			result.MoveNext();
@@ -93,6 +96,9 @@ namespace RegionOrebroLan.PowerShell.Transforming.IntegrationTests
 
 		protected internal virtual void ValidateArgumentException<T>(Action action, string parameterName) where T : ArgumentException
 		{
+			if(action == null)
+				throw new ArgumentNullException(nameof(action));
+
 			try
 			{
 				action.Invoke();

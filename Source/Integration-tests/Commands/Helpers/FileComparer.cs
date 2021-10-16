@@ -69,6 +69,9 @@ namespace RegionOrebroLan.PowerShell.Transforming.IntegrationTests.Commands.Help
 
 		public virtual int GetHashCode(string obj)
 		{
+			if(obj == null)
+				throw new ArgumentNullException(nameof(obj));
+
 			return obj.ToUpperInvariant().GetHashCode();
 		}
 
