@@ -84,7 +84,7 @@
 			<_SymbolFilePattern Condition="$(Configuration) == 'Debug'">$(OutputPath)*.pdb</_SymbolFilePattern>
 		</PropertyGroup>
 		<PropertyGroup>
-			<NuspecProperties>AssemblyFilePattern=$(OutputPath)*.dll;Authors=$(Authors);Description=$(Description);Id=$(PowerShellModuleName);Owners=$(Company);PowerShellModuleManifestFilePattern=$(PowerShellModuleDirectoryPath)*.psd1;ProjectUrl=$(PackageProjectUrl);SymbolFilePattern=$(_SymbolFilePattern);Tags=$(PackageTags) $(PowerShellModulePackageRequiredTags);TargetFrameworkVersionNumber=$(TargetFrameworkVersionNumber);Version=$(Version)</NuspecProperties>
+			<NuspecProperties>AssemblyFilePattern=$(OutputPath)*.dll;Authors=$(Authors);Description=$(Description);Id=$(PowerShellModuleName);Owners=$(Company);PowerShellModuleManifestFilePattern=$(PowerShellModuleDirectoryPath)*.psd1;ProjectUrl=$(PackageProjectUrl);SymbolFilePattern=$(_SymbolFilePattern);Tags=$(PackageTags) $(PowerShellModulePackageRequiredTags);Version=$(Version)</NuspecProperties>
 		</PropertyGroup>
 	</Target>
 	<Target Name="EnsurePowerShellModuleDirectory" DependsOnTargets="EnsureProperties">

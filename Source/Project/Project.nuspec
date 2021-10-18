@@ -2,9 +2,6 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<authors>$Authors$</authors>
-		<dependencies>
-			<group targetFramework=".NETFramework$TargetFrameworkVersionNumber$" />
-		</dependencies>
 		<description>$Description$</description>
 		<id>$Id$</id>
 		<owners>$Owners$</owners>
