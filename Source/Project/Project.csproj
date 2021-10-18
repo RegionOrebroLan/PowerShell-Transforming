@@ -50,8 +50,9 @@
 			<_PowerShellModuleManifestLine Include="@{" />
 			<_PowerShellModuleManifestLine Include="%09Author = %22$(Authors)%22" />
 			<_PowerShellModuleManifestLine Include="%09CompanyName = %22$(Company)%22" />
+			<_PowerShellModuleManifestLine Include="%09CompatiblePSEditions = %22Core%22, %22Desktop%22" />
 			<_PowerShellModuleManifestLine Include="%09Description = %22$(Description)%22" />
-			<_PowerShellModuleManifestLine Include="%09DotNetFrameworkVersion = %22$(TargetFrameworkVersion.Replace('v', ''))%22" />
+			<_PowerShellModuleManifestLine Include="%09DotNetFrameworkVersion = %224.6.2%22" />
 			<_PowerShellModuleManifestLine Include="%09GUID = %22$(PowerShellModuleGuid)%22" />
 			<_PowerShellModuleManifestLine Include="%09HelpInfoURI = %22$(PackageProjectUrl)%22" />
 			<_PowerShellModuleManifestLine Include="%09ModuleVersion = %22$(VersionPrefix)%22" />
@@ -60,7 +61,7 @@
 			<_PowerShellModuleManifestLine Include="%09%09PSData = @{" />
 			<_PowerShellModuleManifestLine Condition="$(VersionPrereleaseName) != ''" Include="%09%09%09Prerelease = %22$(VersionPrereleaseName)%22" />
 			<_PowerShellModuleManifestLine Include="%09%09%09ProjectUri = %22$(PackageProjectUrl)%22" />
-			<_PowerShellModuleManifestLine Include="%09%09%09Tags = %22$(PackageTags.Replace(' ', '%22, %22'))%22" />
+			<_PowerShellModuleManifestLine Include="%09%09%09Tags = %22$(PackageTags.Replace(' ', '%22, %22'))%22, %22PSEdition_Core%22, %22PSEdition_Desktop%22, %22Linux%22, %22macOS%22, %22Windows%22" />
 			<_PowerShellModuleManifestLine Include="%09%09}" />
 			<_PowerShellModuleManifestLine Include="%09}" />
 			<_PowerShellModuleManifestLine Include="%09RootModule = %22$(AssemblyName).dll%22" />
