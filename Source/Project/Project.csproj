@@ -45,7 +45,7 @@
 	</Target>
 	<Target Name="BuildPowerShellModuleManifest" BeforeTargets="BeforeBuild" DependsOnTargets="EnsurePowerShellModuleDirectory">
 		<PropertyGroup>
-			<_PowerShellVersion>5.0</_PowerShellVersion>
+			<_PowerShellVersion>5.1</_PowerShellVersion>
 		</PropertyGroup>
 		<ItemGroup>
 			<_PowerShellModuleManifestLine Include="@{" />
