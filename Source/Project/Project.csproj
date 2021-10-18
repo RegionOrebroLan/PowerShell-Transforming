@@ -8,6 +8,7 @@
 		<AssemblyName>RegionOrebroLan.PowerShell.Transforming</AssemblyName>
 		<AssemblyOriginatorKeyFile>$(SolutionDir).Global\Signing\StrongName.snk</AssemblyOriginatorKeyFile>
 		<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Description>PowerShell commands for json-, package- and xml-transformation.</Description>
 		<FileVersion>$(VersionPrefix).0</FileVersion>
 		<RootNamespace>$(AssemblyName)</RootNamespace>
