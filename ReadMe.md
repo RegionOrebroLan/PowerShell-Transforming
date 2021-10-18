@@ -1,6 +1,6 @@
 # PowerShell-Transforming
 
-PowerShell commands for json-, package- and xml-transformation. This library is simply a PowerShell layer for [**.NET-Transforming**](https://github.com/RegionOrebroLan/.NET-Transforming/).
+PowerShell commands for json-, package- and xml-transformation. This is, from version 2.0.0, a portable module that can run on Linux, Mac-OS and Windows. This library is simply a PowerShell layer for [**.NET-Transforming**](https://github.com/RegionOrebroLan/.NET-Transforming/).
 
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/RegionOrebroLan.Transforming.svg?label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/RegionOrebroLan.Transforming/)
 
@@ -87,3 +87,8 @@ or save it:
 - [Google: writing a powershell cmdlet](https://www.google.com/search?q=writing+a+powershell+cmdlet)
 - [Google: powershell cmdlet unit test](https://www.google.com/search?q=powershell+cmdlet+unit+test)
 - [Google: publish-module dll cmdlet](https://www.google.com/search?q=publish-module+dll+cmdlet)
+
+### Portable modules
+
+- [Portable Modules](https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/writing-portable-modules)
+- [Create and test PowerShell Core cmdlets in C#](https://blog.danskingdom.com/Create-and-test-PowerShell-Core-cmdlets-in-CSharp/)
