@@ -1,9 +1,7 @@
-using System;
 using System.Management.Automation;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
-	[CLSCompliant(false)]
 	public abstract class BasicTransformCommand : Cmdlet
 	{
 		#region Fields

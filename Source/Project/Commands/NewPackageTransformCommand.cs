@@ -7,7 +7,6 @@ using RegionOrebroLan.Transforming;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
-	[CLSCompliant(false)]
 	[Cmdlet(VerbsCommon.New, "PackageTransform")]
 	public class NewPackageTransformCommand : BasicTransformCommand
 	{

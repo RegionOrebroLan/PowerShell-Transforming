@@ -5,7 +5,6 @@ using RegionOrebroLan.Transforming;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
-	[CLSCompliant(false)]
 	[Cmdlet(VerbsCommon.New, "FileTransform")]
 	public class NewFileTransformCommand : BasicTransformCommand
 	{
