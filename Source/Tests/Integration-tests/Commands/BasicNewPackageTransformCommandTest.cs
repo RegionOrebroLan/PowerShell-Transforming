@@ -19,36 +19,6 @@ namespace IntegrationTests.Commands
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(InvalidOperationException))]
-		public void ProcessRecord_IfAnyPathToDeleteIsOutsideTheTransformDirectory_ShouldThrowAnInvalidOperationException()
-		{
-			var newPackageTransformCommand = new NewPackageTransformCommand
-			{
-				Destination = this.GetOutputPath("Transformed-Package"),
-				PathToDeletePatterns = new[] { @"C:\Some-directory\Some-file.txt" },
-				Source = this.GetTestResourcePath("Package"),
-				TransformationNames = new[] { "Release", "Test" }
-			};
-
-			this.InvokeCommand(newPackageTransformCommand);
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(InvalidOperationException))]
-		public void ProcessRecord_IfAnyPathToTransformIsOutsideTheTransformDirectory_ShouldThrowAnInvalidOperationException()
-		{
-			var newPackageTransformCommand = new NewPackageTransformCommand
-			{
-				Destination = this.GetOutputPath("Transformed-Package"),
-				FileToTransformPatterns = new[] { @"C:\Some-directory\Some-file.txt" },
-				Source = this.GetTestResourcePath("Package"),
-				TransformationNames = new[] { "Release", "Test" }
-			};
-
-			this.InvokeCommand(newPackageTransformCommand);
-		}
-
-		[TestMethod]
 		public void ProcessRecord_IfTheDestinationIsADirectoryAndTheSourceIsAZipFile_ShouldTransformCorrectly()
 		{
 			var destination = this.GetOutputPath("Transformed-Package");
@@ -56,8 +26,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Package.zip"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -80,8 +50,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/**", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Package"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -129,8 +99,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/*", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Package"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -153,8 +123,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Empty-directory"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -177,8 +147,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Empty.zip"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -212,8 +182,8 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
-				PathToDeletePatterns = new[] { @"**\Directory-To-Delete\*", @"**\File-To-Delete.*" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
+				PathToDeletePatterns = new[] { "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" },
 				Source = this.GetTestResourcePath("Package.zip"),
 				TransformationNames = new[] { "Release", "Test" }
 			};
@@ -296,7 +266,7 @@ namespace IntegrationTests.Commands
 			var newPackageTransformCommand = new NewPackageTransformCommand
 			{
 				Destination = destination,
-				FileToTransformPatterns = new[] { @"**\*.config*", @"**\*.json", @"**\*.xml" },
+				FileToTransformPatterns = new[] { "**/*.config*", "**/*.json", "**/*.xml" },
 				Source = this.GetTestResourcePath("Alphabetical-Test"),
 				TransformationNames = new[] { "C", "A", "B" }
 			};

@@ -1,9 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
 using System.Management.Automation;
-using RegionOrebroLan.IO;
 using RegionOrebroLan.Transforming;
+using RegionOrebroLan.Transforming.IO;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
@@ -13,7 +12,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		#region Fields
 
 		private static readonly IFileSystem _fileSystem = new FileSystem();
-		private static readonly IPackageTransformer _packageTransformer = new PackageTransformer(new FileSystemEntryMatcher(), _fileSystem, new FileTransformerFactory(_fileSystem), new PackageHandlerLoader(_fileSystem));
+		private static readonly IPackageTransformer _packageTransformer = new PackageTransformer(new FileSearcher(), _fileSystem, new FileTransformerFactory(_fileSystem), new PackageHandlerLoader(_fileSystem));
 
 		#endregion
 

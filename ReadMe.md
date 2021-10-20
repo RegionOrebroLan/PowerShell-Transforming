@@ -24,12 +24,25 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 
 ### Package-transforming
 
+#### Patterns
+
+For handling patterns the Microsoft.Extensions.FileSystemGlobbing.Matcher class is used under the hood.
+
+- FileToTransformPatterns
+- PathToDeletePatterns
+
+Examples: https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0#remarks
+
+NuGet: https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing
+
+Patterns with absolute paths does not result in any matches.
+
 #### Directory to directory transform
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
-        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
-        -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
@@ -37,8 +50,8 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
-        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
-        -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-To-Delete/**", "**/File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
@@ -46,8 +59,8 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
-        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
-        -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-To-Delete/*", "**/File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
@@ -55,8 +68,8 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
-        -FileToTransformPatterns "**\*.config", "**\*.json", "**\*.xml" `
-        -PathToDeletePatterns "**\Directory-To-Delete\*", "**\File-To-Delete.*" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
