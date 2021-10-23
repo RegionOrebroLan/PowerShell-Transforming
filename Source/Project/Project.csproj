@@ -50,6 +50,10 @@
 		<ItemGroup>
 			<_PowerShellModuleManifestLine Include="@{" />
 			<_PowerShellModuleManifestLine Include="%09Author = %22$(Authors)%22" />
+			<_PowerShellModuleManifestLine Include="%09CmdletsToExport = @(" />
+			<_PowerShellModuleManifestLine Include="%09%09%22New-FileTransform%22" />
+			<_PowerShellModuleManifestLine Include="%09%09%22New-PackageTransform%22" />
+			<_PowerShellModuleManifestLine Include="%09)" />
 			<_PowerShellModuleManifestLine Include="%09CompanyName = %22$(Company)%22" />
 			<_PowerShellModuleManifestLine Include="%09CompatiblePSEditions = %22Core%22, %22Desktop%22" />
 			<_PowerShellModuleManifestLine Include="%09Description = %22$(Description)%22" />
