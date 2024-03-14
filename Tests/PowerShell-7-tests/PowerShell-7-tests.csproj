@@ -7,6 +7,6 @@
 		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.1.5" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Integration-tests\Integration-tests.csproj" />
+		<ProjectReference Include="../Integration-tests/Integration-tests.csproj" />
 	</ItemGroup>
 </Project>

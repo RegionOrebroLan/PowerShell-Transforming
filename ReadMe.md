@@ -4,27 +4,27 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/RegionOrebroLan.Transforming.svg?label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/RegionOrebroLan.Transforming/)
 
-## Commands
+## 1 Commands
 
-### File-transforming
+### 1.1 File-transforming
 
-#### JSON-transform
+#### 1.1.1 JSON-transform
 
     New-FileTransform `
         -Destination "C:\Data\Transforms\Out\AppSettings.json" `
         -Source "C:\Data\Transforms\In\AppSettings.json" `
         -Transformation "C:\Data\Transforms\In\AppSettings.Transformation.json";
 
-#### XML-transform
+#### 1.1.2 XML-transform
 
     New-FileTransform `
         -Destination "C:\Data\Transforms\Out\Web.config" `
         -Source "C:\Data\Transforms\In\Web.config" `
         -Transformation "C:\Data\Transforms\In\Web.Transformation.config";
 
-### Package-transforming
+### 1.2 Package-transforming
 
-#### Patterns
+#### 1.2.1 Patterns
 
 For handling patterns the Microsoft.Extensions.FileSystemGlobbing.Matcher class is used under the hood.
 
@@ -37,7 +37,7 @@ NuGet: https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing
 
 Patterns with absolute paths does not result in any matches.
 
-#### Directory to directory transform
+#### 1.2.2 Directory to directory transform
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
@@ -46,7 +46,7 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
-#### Directory to zip-file transform
+#### 1.2.3 Directory to zip-file transform
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
@@ -55,7 +55,7 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
-#### Zip-file to zip-file transform
+#### 1.2.4 Zip-file to zip-file transform
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
@@ -64,7 +64,7 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
-#### Zip-file to directory transform
+#### 1.2.5 Zip-file to directory transform
 
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
@@ -73,7 +73,13 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
-## Deployment/installation
+## 2 Development
+
+### 2.1 Signing
+
+Drop the "StrongName.snk" file in the repository-root. The file should not be included in source control.
+
+## 3 Deployment/installation
 
 If you want to set up a local PowerShell-Gallery to test with:
 
@@ -91,7 +97,7 @@ or save it:
 
     Save-Module -Name "RegionOrebroLan.Transforming" -Path "C:\Data\Saved-PowerShell-Modules";
 
-## Information
+## 4 Information
 
 - [How to Package and Distribute PowerShell Cmdlets, Functions, and Scripts](http://get-powershell.com/post/2011/04/04/How-to-Package-and-Distribute-PowerShell-Cmdlets-Functions-and-Scripts.aspx)
 - [Using C# to Create PowerShell Cmdlets: The Basics](https://www.red-gate.com/simple-talk/dotnet/net-development/using-c-to-create-powershell-cmdlets-the-basics/)
@@ -101,7 +107,7 @@ or save it:
 - [Google: powershell cmdlet unit test](https://www.google.com/search?q=powershell+cmdlet+unit+test)
 - [Google: publish-module dll cmdlet](https://www.google.com/search?q=publish-module+dll+cmdlet)
 
-### Portable modules
+### 4.1 Portable modules
 
 - [Portable Modules](https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/writing-portable-modules)
 - [Create and test PowerShell Core cmdlets in C#](https://blog.danskingdom.com/Create-and-test-PowerShell-Core-cmdlets-in-CSharp/)
