@@ -73,6 +73,15 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
+### 1.3 Common
+
+All the commands above also have the parameter **-AvoidByteOrderMark true/false**. The default value for this parameter is:
+
+- On Windows: false
+- On other platforms (Linux/MacOS): true
+
+This parameter controls the result of the transformation. If a source file that will be transformed has a BOM (Byte Order Mark) the destination file should also have a BOM. This is not always desired, e.g. on a Linux system. So if the source file has a BOM but the parameter "AvoidByteOrderMark" is set to true, the destination file will not have a BOM.
+
 ## 2 Development
 
 ### 2.1 Signing
