@@ -81,13 +81,41 @@ Drop the "StrongName.snk" file in the repository-root. The file should not be in
 
 ## 3 Deployment/installation
 
+### 3.1 PowerShell-Gallery
+
 If you want to set up a local PowerShell-Gallery to test with:
 
-    Register-PSRepository -Name "Local" -InstallationPolicy Trusted -SourceLocation "C:\Data\My-Local-PowerShell-Gallery\";
+    Register-PSRepository -Name "PowerShell-Transforming" -InstallationPolicy Trusted -SourceLocation "{SOLUTION-DIRECTORY}\.powershell-repository";
+
+or run the following script:
+
+- [Register.ps1](/.powershell-repository/Register.ps1)
+
+If you want to remove it:
+
+	Unregister-PSRepository -Name "PowerShell-Transforming";
+
+or run the following script:
+
+- [Unregister.ps1](/.powershell-repository/Unregister.ps1)
+
+Get all module repositories:
+
+	Get-PSRepository
+
+Get module repositories by name (with wildcard):
+
+	Get-PSRepository -Name "*Something*"
+
+More information:
+
+- [PowerShellGet](https://learn.microsoft.com/en-us/powershell/module/powershellget#powershellget)
+
+### 3.2 Install
 
 1. Download this repository and build.
 2. Run **Publish-Module.ps1** in the output-directory (bin\Release).
-3. Enter the NuGetApiKey if required and the name of the Repository or leave it blank to publish to "PSGallery". If you are testing with your local one, press enter for the NuGetApiKey parameter and enter "Local" for the Repository parameter.
+3. Enter the NuGetApiKey if required and the name of the Repository or leave it blank to publish to "PSGallery". If you are testing with your local one, press enter for the NuGetApiKey parameter and enter "PowerShell-Transforming" for the Repository parameter.
 
 Then you can try to install the module:
 
@@ -96,6 +124,24 @@ Then you can try to install the module:
 or save it:
 
     Save-Module -Name "RegionOrebroLan.Transforming" -Path "C:\Data\Saved-PowerShell-Modules";
+
+To uninstall the module:
+
+    Uninstall-Module "RegionOrebroLan.Transforming";
+
+### 3.3 Other
+
+To see if anything is installed from your local PowerShell-repository:
+
+	Find-Module -Repository "PowerShell-Transforming"
+
+The files in [.powershell-repository](/.powershell-repository):
+
+- [ReadMe.md](/.powershell-repository/ReadMe.md)
+- [Register.ps1](/.powershell-repository/Register.ps1)
+- [Unregister.ps1](/.powershell-repository/Unregister.ps1)
+
+give warnings but it seem to work anyhow.
 
 ## 4 Information
 

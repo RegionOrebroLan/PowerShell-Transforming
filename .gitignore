@@ -400,3 +400,8 @@ FodyWeavers.xsd
 # Custom
 NuGet.exe
 StrongName.snk
+
+.powershell-repository/*
+!.powershell-repository/ReadMe.md
+!.powershell-repository/Register.ps1
+!.powershell-repository/Unregister.ps1
