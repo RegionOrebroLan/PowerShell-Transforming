@@ -79,6 +79,14 @@ Patterns with absolute paths does not result in any matches.
 
 Drop the "StrongName.snk" file in the repository-root. The file should not be included in source control.
 
+### 2.2 Build warnings
+
+At the moment we get the following warning (PowerShell-7-tests):
+
+- [NETSDK1206](https://learn.microsoft.com/en-us/dotnet/core/tools/sdk-errors/netsdk1206)
+
+Haven't investigated it further.
+
 ## 3 Deployment/installation
 
 ### 3.1 PowerShell-Gallery
