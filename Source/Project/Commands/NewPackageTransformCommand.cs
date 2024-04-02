@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
 using RegionOrebroLan.Transforming.IO;
@@ -32,17 +31,14 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		public virtual bool Cleanup { get; set; } = true;
 
 		[Parameter(Position = 2)]
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		public virtual string[] FileToTransformPatterns { get; set; }
 
 		protected internal virtual IPackageTransformer PackageTransformer { get; }
 
 		[Parameter(Position = 4)]
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		public virtual string[] PathToDeletePatterns { get; set; }
 
 		[Parameter(Position = 3)]
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		public virtual string[] TransformationNames { get; set; }
 
 		#endregion
