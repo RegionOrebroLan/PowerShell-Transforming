@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{648638FF-59D9-492A-9D1C-4A6641CD968A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F61AAC77-F776-4259-B6CF-B0FB220390C7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\Build-and-test.yml = .github\workflows\Build-and-test.yml
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".powershell-repository", ".powershell-repository", "{6C1555E8-D81A-4EF5-B089-E2C546AC25A6}"
 	ProjectSection(SolutionItems) = preProject
 		.powershell-repository\ReadMe.md = .powershell-repository\ReadMe.md
@@ -77,6 +84,7 @@ Global
 		{C0B58399-C569-4F3B-8B67-36BB051BD523} = {C57524ED-15B5-4C28-A266-ABF035D288A7}
 		{1A879FC0-7722-44FB-B671-B150C30E8015} = {C57524ED-15B5-4C28-A266-ABF035D288A7}
 		{85691329-B329-4462-8F55-91C41542DF4C} = {C57524ED-15B5-4C28-A266-ABF035D288A7}
+		{F61AAC77-F776-4259-B6CF-B0FB220390C7} = {648638FF-59D9-492A-9D1C-4A6641CD968A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E82E96F-A6CE-40AF-A4E4-ACAC1EFDED73}
