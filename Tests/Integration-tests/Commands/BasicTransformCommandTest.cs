@@ -4,7 +4,7 @@ namespace IntegrationTests.Commands
 	{
 		#region Properties
 
-		protected internal override string ProjectRelativeTestResourceDirectoryPath => @"Commands\Test-resources";
+		protected internal override string ProjectRelativeTestResourceDirectoryPath => Path.Combine("Commands", "Test-resources");
 
 		#endregion
 	}
