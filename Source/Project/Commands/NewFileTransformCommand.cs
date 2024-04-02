@@ -1,4 +1,3 @@
-using System;
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
 using RegionOrebroLan.Transforming.IO;

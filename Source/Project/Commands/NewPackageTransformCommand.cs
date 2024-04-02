@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
