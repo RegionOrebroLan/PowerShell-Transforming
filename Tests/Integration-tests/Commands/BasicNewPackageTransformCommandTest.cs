@@ -1,5 +1,5 @@
 using System.IO.Compression;
-using IntegrationTests.Commands.Helpers;
+using IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 
