@@ -11,7 +11,7 @@ namespace IntegrationTests.Commands
 
 		protected internal virtual IEnumerable<string> GetFileSystemEntries(string path)
 		{
-			return Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories);
+			return Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories).OrderBy(entry => entry, StringComparer.OrdinalIgnoreCase);
 		}
 
 		[TestMethod]
