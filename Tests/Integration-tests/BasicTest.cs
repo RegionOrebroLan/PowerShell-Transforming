@@ -20,8 +20,7 @@ namespace IntegrationTests
 		{
 			get
 			{
-				if(this._outputDirectory == null)
-					this._outputDirectory = new DirectoryInfo(this.OutputDirectoryPath);
+				this._outputDirectory ??= new DirectoryInfo(this.OutputDirectoryPath);
 
 				this._outputDirectory.Refresh();
 
