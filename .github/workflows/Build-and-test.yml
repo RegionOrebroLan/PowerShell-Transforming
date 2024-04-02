@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   build_and_test:
-    name: "Build & test - ${{ matrix.os }}"
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -30,12 +30,12 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test - netcoreapp3.1
-      run: dotnet test --configuration Release --framework netcoreapp3.1 --no-build --verbosity normal
+      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests" --framework netcoreapp3.1 --no-build --verbosity normal
     - name: Test - net5.0
-      run: dotnet test --configuration Release --framework net5.0 --no-build --verbosity normal
+      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net5.0 --no-build --verbosity normal
     - name: Test - net6.0
-      run: dotnet test --configuration Release --framework net6.0 --no-build --verbosity normal
+      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net6.0 --no-build --verbosity normal
     - name: Test - net7.0
-      run: dotnet test --configuration Release --framework net7.0 --no-build --verbosity normal
+      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net7.0 --no-build --verbosity normal
     - name: Test - net8.0
-      run: dotnet test --configuration Release --framework net8.0 --no-build --verbosity normal
+      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell7Tests" --framework net8.0 --no-build --verbosity normal
