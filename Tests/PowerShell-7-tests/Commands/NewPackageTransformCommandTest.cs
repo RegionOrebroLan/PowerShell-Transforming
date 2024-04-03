@@ -1,8 +1,7 @@
 using IntegrationTests.Commands;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IntegrationTests.Fixtures;
 
 namespace PowerShell7Tests.Commands
 {
-	[TestClass]
-	public class NewPackageTransformCommandTest : BasicNewPackageTransformCommandTest { }
+	public class NewPackageTransformCommandTest(PackageTransformFixture fixture) : BasicNewPackageTransformCommandTest(fixture) { }
 }

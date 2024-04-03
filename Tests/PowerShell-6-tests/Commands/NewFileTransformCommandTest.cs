@@ -1,8 +1,7 @@
 using IntegrationTests.Commands;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IntegrationTests.Fixtures;
 
 namespace PowerShell6Tests.Commands
 {
-	[TestClass]
-	public class NewFileTransformCommandTest : BasicNewFileTransformCommandTest { }
+	public class NewFileTransformCommandTest(FileTransformFixture fixture) : BasicNewFileTransformCommandTest(fixture) { }
 }

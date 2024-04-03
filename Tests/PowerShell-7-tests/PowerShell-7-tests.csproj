@@ -9,4 +9,10 @@
 	<ItemGroup>
 		<ProjectReference Include="../Integration-tests/Integration-tests.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Test-output/**/*" />
+		<Content Remove="Test-output/**/*" />
+		<None Remove="Test-output/**/*" />
+		<None Include="Test-output/ReadMe.md" />
+	</ItemGroup>
 </Project>

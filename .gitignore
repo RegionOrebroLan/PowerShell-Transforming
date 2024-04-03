@@ -405,3 +405,6 @@ StrongName.snk
 !.powershell-repository/ReadMe.md
 !.powershell-repository/Register.ps1
 !.powershell-repository/Unregister.ps1
+
+Tests/PowerShell-*-tests/Test-output/*
+!Tests/PowerShell-*-tests/Test-output/ReadMe.md

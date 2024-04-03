@@ -15,7 +15,7 @@
 		<ProjectReference Include="../../Source/Project/Project.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Commands/Test-resources/Empty-directory" />
+		<Folder Include="Resources/NewPackageTransformCommandTest/Empty" />
 	</ItemGroup>
 	<Target Name="EnsureEmptyDirectory" BeforeTargets="BeforeBuild">
 		<MakeDir Condition="!Exists('%(Folder.FullPath)')" Directories="%(Folder.FullPath)" />
