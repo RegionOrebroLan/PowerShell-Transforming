@@ -1,6 +1,5 @@
 using IntegrationTests.Fixtures;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
-using Xunit;
 
 namespace IntegrationTests.Commands
 {
@@ -11,19 +10,13 @@ namespace IntegrationTests.Commands
 	/// </summary>
 	public abstract class BasicNewFileTransformCommandTest(FileTransformFixture fixture) : IClassFixture<FileTransformFixture>
 	{
+		#region Fields
+
 		private readonly FileTransformFixture _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
 
-		#region Methods
+		#endregion
 
-		private static void Invoke(string destination, string source, string transformation)
-		{
-			Global.InvokeCommand(new NewFileTransformCommand
-			{
-				Destination = destination,
-				Source = source,
-				Transformation = transformation
-			});
-		}
+		#region Methods
 
 		private string GetOutputPath(params string[] paths)
 		{
@@ -35,9 +28,14 @@ namespace IntegrationTests.Commands
 			return Global.GetResourcePath(ResolvePaths(paths));
 		}
 
-		private static string[] ResolvePaths(params string[] paths)
+		private static void Invoke(string destination, string source, string transformation)
 		{
-			return new[] { "NewFileTransformCommandTest" }.Concat(paths).ToArray();
+			Global.InvokeCommand(new NewFileTransformCommand
+			{
+				Destination = destination,
+				Source = source,
+				Transformation = transformation
+			});
 		}
 
 		[Fact]
@@ -62,195 +60,115 @@ namespace IntegrationTests.Commands
 		}
 
 		[Fact]
-		public void ProcessRecord_IfThereAreNoTransformations_ShouldTransformCorrectly()
+		public async Task ProcessRecord_IfThereAreNoTransformations_ShouldTransformCorrectly()
 		{
-			var fileName = "Web.config";
-			var destination = this.GetOutputPath("Web.Not-Transformed.config");
+			await Task.CompletedTask;
 
-			var newFileTransformCommand = new NewFileTransformCommand
-			{
-				Destination = destination,
-				Source = GetResourcePath(fileName),
-				Transformation = GetResourcePath("Web.No-Transformation.config")
-			};
-
-			Global.InvokeCommand(newFileTransformCommand);
-
+			var destination = this.GetOutputPath($"Web.Not-Transformed{Global.GetUniqueSuffix()}.config");
+			Invoke(destination, GetResourcePath("Web.config"), GetResourcePath("Web.No-Transformation.config"));
 			var expectedContent = File.ReadAllText(GetResourcePath("Web.No-Transformation.Expected.config"));
 			var actualContent = File.ReadAllText(destination);
-
 			Assert.Equal(expectedContent, actualContent);
 
-			fileName = "appsettings.json";
-			destination = this.GetOutputPath("appsettings.Not-Transformed.json");
-
-			newFileTransformCommand = new NewFileTransformCommand
-			{
-				Destination = destination,
-				Source = GetResourcePath(fileName),
-				Transformation = GetResourcePath("appsettings.No-Transformation.json")
-			};
-
-			Global.InvokeCommand(newFileTransformCommand);
-
+			destination = this.GetOutputPath($"appsettings.Not-Transformed{Global.GetUniqueSuffix()}.json");
+			Invoke(destination, GetResourcePath("appsettings.json"), GetResourcePath("appsettings.No-Transformation.json"));
 			expectedContent = File.ReadAllText(GetResourcePath("appsettings.No-Transformation.Expected.json"));
 			actualContent = File.ReadAllText(destination);
-
 			Assert.Equal(expectedContent, actualContent);
 		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheSourceParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateSourceParameterException<ArgumentException>(this.GetTestResourcePath("Non-existing-file.txt"));
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Non-existing-file.txt"), GetResourcePath("Web.Transformation.config")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheSourceParameterIsADirectory_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateSourceParameterException<ArgumentException>(this.GetTestResourcePath("Package"));
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsADirectory_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Package"), GetResourcePath("Web.Transformation.config")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheSourceParameterIsEmpty_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateSourceParameterException<ArgumentException>(string.Empty);
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsEmpty_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath("Web.config"), string.Empty, GetResourcePath("Web.Transformation.config")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentNullException))]
-		//public void ProcessRecord_IfTheSourceParameterIsNull_ShouldThrowAnArgumentNullException()
-		//{
-		//	this.ValidateSourceParameterException<ArgumentNullException>(null);
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsNull_ShouldThrowAnArgumentNullException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentNullException>("source", () => Invoke(this.GetOutputPath("Web.config"), null, GetResourcePath("Web.Transformation.config")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheSourceParameterIsWhitespace_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateSourceParameterException<ArgumentException>(" ");
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsWhitespace_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath("Web.config"), " ", GetResourcePath("Web.Transformation.config")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheTransformationParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateTransformationParameterException<ArgumentException>(this.GetTestResourcePath("Non-existing-file.txt"));
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheTransformationParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("transformation", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Web.config"), GetResourcePath("Non-existing-file.txt")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheTransformationParameterIsADirectory_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateTransformationParameterException<ArgumentException>(this.GetTestResourcePath("Package"));
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheTransformationParameterIsADirectory_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("transformation", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Web.config"), GetResourcePath("Package")));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheTransformationParameterIsEmpty_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateTransformationParameterException<ArgumentException>(string.Empty);
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheTransformationParameterIsEmpty_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("transformation", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Web.config"), string.Empty));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentNullException))]
-		//public void ProcessRecord_IfTheTransformationParameterIsNull_ShouldThrowAnArgumentNullException()
-		//{
-		//	this.ValidateTransformationParameterException<ArgumentNullException>(null);
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheTransformationParameterIsNull_ShouldThrowAnArgumentNullException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentNullException>("transformation", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Web.config"), null));
+		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void ProcessRecord_IfTheTransformationParameterIsWhitespace_ShouldThrowAnArgumentException()
-		//{
-		//	this.ValidateTransformationParameterException<ArgumentException>(" ");
-		//}
+		[Fact]
+		public async Task ProcessRecord_IfTheTransformationParameterIsWhitespace_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("transformation", () => Invoke(this.GetOutputPath("Web.config"), GetResourcePath("Web.config"), " "));
+		}
 
-		//[TestMethod]
-		//public void ProcessRecord_ShouldTransformCorrectly()
-		//{
-		//	var fileName = "Web.config";
-		//	var destination = this.GetOutputPath(fileName);
+		[Fact]
+		public async Task ProcessRecord_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//	var newFileTransformCommand = new NewFileTransformCommand
-		//	{
-		//		Destination = destination,
-		//		Source = this.GetTestResourcePath(fileName),
-		//		Transformation = this.GetTestResourcePath("Web.Transformation.config")
-		//	};
+			var destination = this.GetOutputPath($"Web{Global.GetUniqueSuffix()}.config");
+			Invoke(destination, GetResourcePath("Web.config"), GetResourcePath("Web.Transformation.config"));
+			var expectedContent = File.ReadAllText(GetResourcePath("Web.Expected.config"));
+			var actualContent = File.ReadAllText(destination);
+			Assert.Equal(expectedContent, actualContent);
 
-		//	this.InvokeCommand(newFileTransformCommand);
+			destination = this.GetOutputPath($"appsettings{Global.GetUniqueSuffix()}.json");
+			Invoke(destination, GetResourcePath("appsettings.json"), GetResourcePath("appsettings.Transformation.json"));
+			expectedContent = File.ReadAllText(GetResourcePath("appsettings.Expected.json"));
+			actualContent = File.ReadAllText(destination);
+			Assert.Equal(expectedContent, actualContent);
+		}
 
-		//	var expectedContent = File.ReadAllText(this.GetTestResourcePath("Web.Expected.config"));
-		//	var actualContent = File.ReadAllText(destination);
-
-		//	Assert.AreEqual(expectedContent, actualContent);
-
-		//	fileName = "AppSettings.json";
-		//	destination = this.GetOutputPath(fileName);
-
-		//	newFileTransformCommand = new NewFileTransformCommand
-		//	{
-		//		Destination = destination,
-		//		Source = this.GetTestResourcePath(fileName),
-		//		Transformation = this.GetTestResourcePath("AppSettings.Transformation.json")
-		//	};
-
-		//	this.InvokeCommand(newFileTransformCommand);
-
-		//	expectedContent = File.ReadAllText(this.GetTestResourcePath("AppSettings.Expected.json"));
-		//	actualContent = File.ReadAllText(destination);
-
-		//	Assert.AreEqual(expectedContent, actualContent);
-		//}
-
-		//protected internal virtual void ValidateDestinationParameterException<T>(string destination) where T : ArgumentException
-		//{
-		//	this.ValidateArgumentException<T>(() =>
-		//	{
-		//		var newFileTransformCommand = new NewFileTransformCommand
-		//		{
-		//			Destination = destination,
-		//			Source = this.GetTestResourcePath("Web.config"),
-		//			Transformation = this.GetTestResourcePath("Web.Transformation.config")
-		//		};
-
-		//		this.InvokeCommand(newFileTransformCommand);
-		//	}, "destination");
-		//}
-
-		//protected internal virtual void ValidateSourceParameterException<T>(string source) where T : ArgumentException
-		//{
-		//	this.ValidateArgumentException<T>(() =>
-		//	{
-		//		var newFileTransformCommand = new NewFileTransformCommand
-		//		{
-		//			Destination = this.GetOutputPath("Web.config"),
-		//			Source = source,
-		//			Transformation = this.GetTestResourcePath("Web.Transformation.config")
-		//		};
-
-		//		this.InvokeCommand(newFileTransformCommand);
-		//	}, "source");
-		//}
-
-		//protected internal virtual void ValidateTransformationParameterException<T>(string transformation) where T : ArgumentException
-		//{
-		//	this.ValidateArgumentException<T>(() =>
-		//	{
-		//		var newFileTransformCommand = new NewFileTransformCommand
-		//		{
-		//			Destination = this.GetOutputPath("Web.config"),
-		//			Source = this.GetTestResourcePath("Web.config"),
-		//			Transformation = transformation
-		//		};
-
-		//		this.InvokeCommand(newFileTransformCommand);
-		//	}, "transformation");
-		//}
+		private static string[] ResolvePaths(params string[] paths)
+		{
+			return new[] { "NewFileTransformCommandTest" }.Concat(paths).ToArray();
+		}
 
 		#endregion
 	}

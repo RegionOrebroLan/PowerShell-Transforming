@@ -1,10 +1,7 @@
-//using System.IO.Compression;
+using System.IO.Compression;
 using IntegrationTests.Fixtures;
-//using IntegrationTests.Helpers;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using RegionOrebroLan.PowerShell.Transforming.Commands;
-using Xunit;
-//using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using IntegrationTests.Helpers;
+using RegionOrebroLan.PowerShell.Transforming.Commands;
 
 namespace IntegrationTests.Commands
 {
@@ -15,311 +12,219 @@ namespace IntegrationTests.Commands
 	/// </summary>
 	public abstract class BasicNewPackageTransformCommandTest(PackageTransformFixture fixture) : IClassFixture<PackageTransformFixture>
 	{
+		#region Fields
+
 		private readonly PackageTransformFixture _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+
+		#endregion
 
 		#region Methods
 
-		[Fact]
-		public void Test()
+		protected internal virtual IEnumerable<string> GetFileSystemEntries(string path)
 		{
-			Assert.NotNull(this._fixture);
+			return Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories).OrderBy(entry => entry, StringComparer.OrdinalIgnoreCase);
 		}
 
-		//		protected internal virtual IEnumerable<string> GetFileSystemEntries(string path)
-		//		{
-		//			return Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories).OrderBy(entry => entry, StringComparer.OrdinalIgnoreCase);
-		//		}
+		private string GetOutputPath(params string[] paths)
+		{
+			return this._fixture.GetOutputPath(paths);
+		}
 
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheDestinationIsADirectoryAndTheSourceIsAZipFile_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package");
+		private static string GetResourcePath(params string[] paths)
+		{
+			return Global.GetResourcePath(ResolvePaths(paths));
+		}
 
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Package.zip"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
+		private static void Invoke(string destination, string[] fileToTransformPatterns, string[] pathToDeletePatterns, string source, string[] transformationNames)
+		{
+			Global.InvokeCommand(new NewPackageTransformCommand
+			{
+				Destination = destination,
+				FileToTransformPatterns = fileToTransformPatterns,
+				PathToDeletePatterns = pathToDeletePatterns,
+				Source = source,
+				TransformationNames = transformationNames
+			});
+		}
 
-		//			this.InvokeCommand(newPackageTransformCommand);
+		[Fact]
+		public async Task ProcessRecord_IfTheDestinationIsADirectoryAndTheSourceIsAZipFile_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//			var expected = this.GetTestResourcePath("Package-Expected");
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"], GetResourcePath("Package.zip"), ["Release", "Test"]);
+			var expected = GetResourcePath("Package-Expected");
+			var actualItems = this.GetFileSystemEntries(destination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
 
-		//			var actualItems = this.GetFileSystemEntries(destination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
+		}
 
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
-		//		}
+		[Fact]
+		public async Task ProcessRecord_IfTheDestinationIsAZipFileAndTheSourceIsADirectory_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheDestinationIsAZipFileAndTheSourceIsADirectory_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package.zip");
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}.zip");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/**", "**/File-To-Delete.*"], GetResourcePath("Package"), ["Release", "Test"]);
+			var extractedDestination = this.GetOutputPath($"Extracted-Transformed-Package{Global.GetUniqueSuffix()}");
+			ZipFile.ExtractToDirectory(destination, extractedDestination);
+			var expected = GetResourcePath("Package-Expected");
+			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
+		}
 
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/**", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Package"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
+		[Fact]
+		public async Task ProcessRecord_IfTheDestinationParameterIsEmpty_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("destination", () => Invoke(string.Empty, null, null, GetResourcePath("Empty"), null));
+		}
 
-		//			this.InvokeCommand(newPackageTransformCommand);
+		[Fact]
+		public async Task ProcessRecord_IfTheDestinationParameterIsNull_ShouldThrowAnArgumentNullException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentNullException>("destination", () => Invoke(null, null, null, GetResourcePath("Empty"), null));
+		}
 
-		//			var extractedDestination = this.GetOutputPath("Extracted-Transformed-Package");
+		[Fact]
+		public async Task ProcessRecord_IfTheDestinationParameterIsWhitespace_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("destination", () => Invoke(" ", null, null, GetResourcePath("Empty"), null));
+		}
 
-		//			ZipFile.ExtractToDirectory(destination, extractedDestination);
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceIsADirectory_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//			var expected = this.GetTestResourcePath("Package-Expected");
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/*", "**/File-To-Delete.*"], GetResourcePath("Package"), ["Release", "Test"]);
+			var expected = GetResourcePath("Package-Expected");
+			var actualItems = this.GetFileSystemEntries(destination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
+		}
 
-		//			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceIsAnEmptyDirectory_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
-		//		}
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"], GetResourcePath("Empty"), ["Release", "Test"]);
+			var expected = GetResourcePath("Empty");
+			var actualItems = this.GetFileSystemEntries(destination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
+		}
 
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheDestinationParameterIsEmpty_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateDestinationParameterException<ArgumentException>(string.Empty);
-		//		}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceIsAnEmptyZipFile_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentNullException))]
-		//		public void ProcessRecord_IfTheDestinationParameterIsNull_ShouldThrowAnArgumentNullException()
-		//		{
-		//			this.ValidateDestinationParameterException<ArgumentNullException>(null);
-		//		}
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}.zip");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"], GetResourcePath("Empty.zip"), ["Release", "Test"]);
+			var extractedDestination = this.GetOutputPath($"Extracted-Transformed-Package{Global.GetUniqueSuffix()}");
+			ZipFile.ExtractToDirectory(destination, extractedDestination);
 
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheDestinationParameterIsWhitespace_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateDestinationParameterException<ArgumentException>(" ");
-		//		}
+			// To handle NET Core 3.1 and NET 5.0 and up.
+			// Extracting an empty archive does not create an empty directory.
+#if !NETFRAMEWORK
+			if(!Directory.Exists(extractedDestination))
+				Directory.CreateDirectory(extractedDestination);
+#endif
 
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheSourceIsADirectory_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package");
+			var expected = GetResourcePath("Empty");
+			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
+		}
 
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/*", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Package"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceIsAZipFile_ShouldTransformCorrectly()
+		{
+			await Task.CompletedTask;
 
-		//			this.InvokeCommand(newPackageTransformCommand);
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}.zip");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"], GetResourcePath("Package.zip"), ["Release", "Test"]);
+			var extractedDestination = this.GetOutputPath($"Extracted-Transformed-Package{Global.GetUniqueSuffix()}");
+			ZipFile.ExtractToDirectory(destination, extractedDestination);
+			var expected = GetResourcePath("Package-Expected");
+			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
+		}
 
-		//			var expected = this.GetTestResourcePath("Package-Expected");
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterDoesNotExistAsDirectory_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, GetResourcePath("Non-existing-directory"), null));
+		}
 
-		//			var actualItems = this.GetFileSystemEntries(destination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, GetResourcePath("Non-existing-file.txt"), null));
+		}
 
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
-		//		}
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsEmpty_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, string.Empty, null));
+		}
 
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheSourceIsAnEmptyDirectory_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package");
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsNeitherADirectoryNorAZipFile_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			var source = GetResourcePath("File.txt");
 
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Empty-directory"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
+			if(!File.Exists(source))
+				Assert.Fail($"The file \"{source}\" does not exist.");
 
-		//			this.InvokeCommand(newPackageTransformCommand);
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, source, null));
+		}
 
-		//			var expected = this.GetTestResourcePath("Empty-directory");
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsNull_ShouldThrowAnArgumentNullException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentNullException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, null, null));
+		}
 
-		//			var actualItems = this.GetFileSystemEntries(destination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+		[Fact]
+		public async Task ProcessRecord_IfTheSourceParameterIsWhitespace_ShouldThrowAnArgumentException()
+		{
+			await Task.CompletedTask;
+			Assert.Throws<ArgumentException>("source", () => Invoke(this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}"), null, null, " ", null));
+		}
 
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
-		//		}
+		[Fact]
+		public async Task ProcessRecord_ShouldTransformWithTheTransformationNamesInTheDeclaredOrderAndNotAlphabetically()
+		{
+			await Task.CompletedTask;
 
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheSourceIsAnEmptyZipFile_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package.zip");
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}");
+			Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], null, GetResourcePath("Alphabetical-Test"), ["C", "A", "B"]);
+			var expected = GetResourcePath("Alphabetical-Test-Expected");
+			var actualItems = this.GetFileSystemEntries(destination).ToArray();
+			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
+			Assert.True(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
+		}
 
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Empty.zip"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
-
-		//			this.InvokeCommand(newPackageTransformCommand);
-
-		//			var extractedDestination = this.GetOutputPath("Extracted-Transformed-Package");
-
-		//			ZipFile.ExtractToDirectory(destination, extractedDestination);
-
-		//			// To handle NET 5.0 and NET Core 3.1.
-		//			// Extracting an empty archive does not create an empty directory.
-		//#if !NETFRAMEWORK
-		//			if(!Directory.Exists(extractedDestination))
-		//				Directory.CreateDirectory(extractedDestination);
-		//#endif
-
-		//			var expected = this.GetTestResourcePath("Empty-directory");
-
-		//			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
-
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
-		//		}
-
-		//		[TestMethod]
-		//		public void ProcessRecord_IfTheSourceIsAZipFile_ShouldTransformCorrectly()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package.zip");
-
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				PathToDeletePatterns = ["**/Directory-To-Delete/**/*", "**/File-To-Delete.*"],
-		//				Source = this.GetTestResourcePath("Package.zip"),
-		//				TransformationNames = ["Release", "Test"]
-		//			};
-
-		//			this.InvokeCommand(newPackageTransformCommand);
-
-		//			var extractedDestination = this.GetOutputPath("Extracted-Transformed-Package");
-
-		//			ZipFile.ExtractToDirectory(destination, extractedDestination);
-
-		//			var expected = this.GetTestResourcePath("Package-Expected");
-
-		//			var actualItems = this.GetFileSystemEntries(extractedDestination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
-
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(extractedDestination, expected)));
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheSourceParameterDoesNotExistAsDirectory_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateSourceParameterException<ArgumentException>(this.GetTestResourcePath("Non-existing-directory"));
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheSourceParameterDoesNotExistAsFile_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateSourceParameterException<ArgumentException>(this.GetTestResourcePath("Non-existing-file.txt"));
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheSourceParameterIsEmpty_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateSourceParameterException<ArgumentException>(string.Empty);
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheSourceParameterIsNeitherADirectoryNorAZipFile_ShouldThrowAnArgumentException()
-		//		{
-		//			try
-		//			{
-		//				var newPackageTransformCommand = new NewPackageTransformCommand
-		//				{
-		//					Destination = this.GetOutputPath("Transformed-Package"),
-		//					Source = this.GetTestResourcePath("File.txt")
-		//				};
-
-		//				this.InvokeCommand(newPackageTransformCommand);
-		//			}
-		//			catch(ArgumentException argumentException)
-		//			{
-		//				if(string.Equals(argumentException.ParamName, "source", StringComparison.Ordinal))
-		//					throw;
-		//			}
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentNullException))]
-		//		public void ProcessRecord_IfTheSourceParameterIsNull_ShouldThrowAnArgumentNullException()
-		//		{
-		//			this.ValidateSourceParameterException<ArgumentNullException>(null);
-		//		}
-
-		//		[TestMethod]
-		//		[ExpectedException(typeof(ArgumentException))]
-		//		public void ProcessRecord_IfTheSourceParameterIsWhitespace_ShouldThrowAnArgumentException()
-		//		{
-		//			this.ValidateSourceParameterException<ArgumentException>(" ");
-		//		}
-
-		//		[TestMethod]
-		//		public void ProcessRecord_ShouldTransformWithTheTransformationNamesInTheDeclaredOrderAndNotAlphabetically()
-		//		{
-		//			var destination = this.GetOutputPath("Transformed-Package");
-
-		//			var newPackageTransformCommand = new NewPackageTransformCommand
-		//			{
-		//				Destination = destination,
-		//				FileToTransformPatterns = ["**/*.config*", "**/*.json", "**/*.xml"],
-		//				Source = this.GetTestResourcePath("Alphabetical-Test"),
-		//				TransformationNames = ["C", "A", "B"]
-		//			};
-
-		//			this.InvokeCommand(newPackageTransformCommand);
-
-		//			var expected = this.GetTestResourcePath("Alphabetical-Test-Expected");
-
-		//			var actualItems = this.GetFileSystemEntries(destination).ToArray();
-		//			var expectedItems = this.GetFileSystemEntries(expected).ToArray();
-
-		//			Assert.IsTrue(actualItems.SequenceEqual(expectedItems, new FileComparer(destination, expected)));
-		//		}
-
-		//		protected internal virtual void ValidateDestinationParameterException<T>(string destination) where T : ArgumentException
-		//		{
-		//			this.ValidateArgumentException<T>(() =>
-		//			{
-		//				var newPackageTransformCommand = new NewPackageTransformCommand
-		//				{
-		//					Destination = destination,
-		//					Source = this.GetTestResourcePath("Empty-directory")
-		//				};
-
-		//				this.InvokeCommand(newPackageTransformCommand);
-		//			}, "destination");
-		//		}
-
-		//		protected internal virtual void ValidateSourceParameterException<T>(string source) where T : ArgumentException
-		//		{
-		//			this.ValidateArgumentException<T>(() =>
-		//			{
-		//				var newPackageTransformCommand = new NewPackageTransformCommand
-		//				{
-		//					Destination = this.GetOutputPath("Transformed-Package"),
-		//					Source = source
-		//				};
-
-		//				this.InvokeCommand(newPackageTransformCommand);
-		//			}, "source");
-		//		}
+		private static string[] ResolvePaths(params string[] paths)
+		{
+			return new[] { "NewPackageTransformCommandTest" }.Concat(paths).ToArray();
+		}
 
 		#endregion
 	}

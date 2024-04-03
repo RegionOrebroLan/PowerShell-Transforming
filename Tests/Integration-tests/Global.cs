@@ -7,8 +7,8 @@ namespace IntegrationTests
 	{
 		#region Fields
 
-		public static DirectoryInfo ResourcesDirectory = GetResourcesDirectory();
 		public static DirectoryInfo OutputDirectory = GetOutputDirectory();
+		public static DirectoryInfo ResourcesDirectory = GetResourcesDirectory();
 
 		#endregion
 
@@ -31,6 +31,11 @@ namespace IntegrationTests
 			var baseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 
 			return new DirectoryInfo(Path.Combine(baseDirectory.Parent!.Parent!.Parent!.Parent!.FullName, "Integration-tests", "Resources"));
+		}
+
+		public static string GetUniqueSuffix()
+		{
+			return $"-{Guid.NewGuid().ToString().Replace("-", string.Empty)}";
 		}
 
 		public static void InvokeCommand(Cmdlet command)
