@@ -1,10 +1,11 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 name: Build & test
 on:
-  push:
-    branches: [ "main", "Development" ]
   pull_request:
-    branches: [ "main", "Development" ]
+  push:
+    branches:
+    - Development
+    - main
   workflow_dispatch:
 jobs:
   build_and_test:
@@ -13,7 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macOS-latest, ubuntu-latest, windows-latest ]
+        os:
+        - macOS-latest
+        - ubuntu-latest
+        - windows-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -29,13 +33,19 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Test - netcoreapp3.1
-      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests" --framework netcoreapp3.1 --no-build --verbosity normal
-    - name: Test - net5.0
-      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net5.0 --no-build --verbosity normal
-    - name: Test - net6.0
-      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net6.0 --no-build --verbosity normal
-    - name: Test - net7.0
-      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell6Tests|FullyQualifiedName~PowerShell7Tests" --framework net7.0 --no-build --verbosity normal
-    - name: Test - net8.0
-      run: dotnet test --configuration Release --filter "FullyQualifiedName~PowerShell7Tests" --framework net8.0 --no-build --verbosity normal
+    - name: PowerShell 6 - netcoreapp3.1 - tests
+      run: dotnet test Tests/PowerShell-6-tests/PowerShell-6-tests.csproj --configuration Release --framework netcoreapp3.1 --no-build --verbosity normal
+    - name: PowerShell 6 - net5.0 - tests
+      run: dotnet test Tests/PowerShell-6-tests/PowerShell-6-tests.csproj --configuration Release --framework net5.0 --no-build --verbosity normal
+    - name: PowerShell 6 - net6.0 - tests
+      run: dotnet test Tests/PowerShell-6-tests/PowerShell-6-tests.csproj --configuration Release --framework net6.0 --no-build --verbosity normal
+    - name: PowerShell 6 - net7.0 - tests
+      run: dotnet test Tests/PowerShell-6-tests/PowerShell-6-tests.csproj --configuration Release --framework net7.0 --no-build --verbosity normal
+    - name: PowerShell 7 - net5.0 - tests
+      run: dotnet test Tests/PowerShell-7-tests/PowerShell-7-tests.csproj --configuration Release --framework net5.0 --no-build --verbosity normal
+    - name: PowerShell 7 - net6.0 - tests
+      run: dotnet test Tests/PowerShell-7-tests/PowerShell-7-tests.csproj --configuration Release --framework net6.0 --no-build --verbosity normal
+    - name: PowerShell 7 - net7.0 - tests
+      run: dotnet test Tests/PowerShell-7-tests/PowerShell-7-tests.csproj --configuration Release --framework net7.0 --no-build --verbosity normal
+    - name: PowerShell 7 - net8.0 - tests
+      run: dotnet test Tests/PowerShell-7-tests/PowerShell-7-tests.csproj --configuration Release --framework net8.0 --no-build --verbosity normal
