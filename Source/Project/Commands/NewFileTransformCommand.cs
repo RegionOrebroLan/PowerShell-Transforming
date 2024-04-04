@@ -1,32 +1,27 @@
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
-using RegionOrebroLan.Transforming.IO;
+using IServiceProvider = RegionOrebroLan.PowerShell.Transforming.DependencyInjection.IServiceProvider;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
 	[Cmdlet(VerbsCommon.New, "FileTransform")]
-	public class NewFileTransformCommand : BasicTransformCommand
+	public class NewFileTransformCommand(IServiceProvider serviceProvider) : BasicTransformCommand(serviceProvider)
 	{
 		#region Fields
 
-		private static readonly IFileTransformerFactory _fileTransformerFactory = new FileTransformerFactory(new FileSystem());
+		private IFileTransformerFactory _fileTransformerFactory;
 
 		#endregion
 
 		#region Constructors
 
-		public NewFileTransformCommand() : this(_fileTransformerFactory) { }
-
-		protected internal NewFileTransformCommand(IFileTransformerFactory fileTransformerFactory)
-		{
-			this.FileTransformerFactory = fileTransformerFactory ?? throw new ArgumentNullException(nameof(fileTransformerFactory));
-		}
+		public NewFileTransformCommand() : this(DependencyInjection.ServiceProvider.Instance) { }
 
 		#endregion
 
 		#region Properties
 
-		protected internal virtual IFileTransformerFactory FileTransformerFactory { get; }
+		protected internal virtual IFileTransformerFactory FileTransformerFactory => this._fileTransformerFactory ??= this.ServiceProvider.GetFileTransformerFactory(this.ServiceProvider.GetLoggerFactory(this));
 
 		[Parameter(Position = 2, Mandatory = true)]
 		public virtual string Transformation { get; set; }
@@ -39,7 +34,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		{
 			try
 			{
-				this.FileTransformerFactory.Create(this.Source).Transform(this.Destination, this.Source, this.Transformation);
+				this.FileTransformerFactory.Create(this.Source).Transform(this.Destination, this.Source, this.Transformation, this.CreateOptions().File);
 			}
 			catch(MissingMethodException missingMethodException)
 			{

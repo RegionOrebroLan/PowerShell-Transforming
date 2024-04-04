@@ -1,8 +1,10 @@
 using System.Management.Automation;
+using RegionOrebroLan.Transforming.Configuration;
+using IServiceProvider = RegionOrebroLan.PowerShell.Transforming.DependencyInjection.IServiceProvider;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
-	public abstract class BasicTransformCommand : Cmdlet
+	public abstract class BasicTransformCommand(IServiceProvider serviceProvider) : Cmdlet
 	{
 		#region Fields
 
@@ -12,13 +14,31 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 
 		#region Properties
 
+		[Parameter(Position = 10)]
+		public virtual bool? AvoidByteOrderMark { get; set; }
+
 		[Parameter(Position = 1, Mandatory = true)]
 		public virtual string Destination { get; set; }
 
 		protected internal virtual string MissingMethodExceptionMessage => _missingMethodExceptionMessage;
+		protected internal virtual IServiceProvider ServiceProvider => serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
 		[Parameter(Position = 0, Mandatory = true)]
 		public virtual string Source { get; set; }
+
+		#endregion
+
+		#region Methods
+
+		protected internal virtual TransformingOptions CreateOptions()
+		{
+			var options = new TransformingOptions();
+
+			if(this.AvoidByteOrderMark != null)
+				options.File.AvoidByteOrderMark = this.AvoidByteOrderMark.Value;
+
+			return options;
+		}
 
 		#endregion
 	}

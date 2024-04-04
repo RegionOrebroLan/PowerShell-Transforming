@@ -1,39 +1,34 @@
 using System.Management.Automation;
 using RegionOrebroLan.Transforming;
-using RegionOrebroLan.Transforming.IO;
+using RegionOrebroLan.Transforming.Configuration;
+using IServiceProvider = RegionOrebroLan.PowerShell.Transforming.DependencyInjection.IServiceProvider;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
 	[Cmdlet(VerbsCommon.New, "PackageTransform")]
-	public class NewPackageTransformCommand : BasicTransformCommand
+	public class NewPackageTransformCommand(IServiceProvider serviceProvider) : BasicTransformCommand(serviceProvider)
 	{
 		#region Fields
 
-		private static readonly IFileSystem _fileSystem = new FileSystem();
-		private static readonly IPackageTransformer _packageTransformer = new PackageTransformer(new FileSearcher(), _fileSystem, new FileTransformerFactory(_fileSystem), new PackageHandlerLoader(_fileSystem));
+		private IPackageTransformer _packageTransformer;
 
 		#endregion
 
 		#region Constructors
 
-		public NewPackageTransformCommand() : this(_packageTransformer) { }
-
-		protected internal NewPackageTransformCommand(IPackageTransformer packageTransformer)
-		{
-			this.PackageTransformer = packageTransformer ?? throw new ArgumentNullException(nameof(packageTransformer));
-		}
+		public NewPackageTransformCommand() : this(DependencyInjection.ServiceProvider.Instance) { }
 
 		#endregion
 
 		#region Properties
 
-		[Parameter(Position = 5)]
-		public virtual bool Cleanup { get; set; } = true;
+		[Parameter(Position = 20)]
+		public virtual bool? Cleanup { get; set; }
 
 		[Parameter(Position = 2)]
 		public virtual string[] FileToTransformPatterns { get; set; }
 
-		protected internal virtual IPackageTransformer PackageTransformer { get; }
+		protected internal virtual IPackageTransformer PackageTransformer => this._packageTransformer ??= this.ServiceProvider.GetPackageTransformer(this.ServiceProvider.GetLoggerFactory(this));
 
 		[Parameter(Position = 4)]
 		public virtual string[] PathToDeletePatterns { get; set; }
@@ -45,11 +40,21 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 
 		#region Methods
 
+		protected internal override TransformingOptions CreateOptions()
+		{
+			var options = base.CreateOptions();
+
+			if(this.Cleanup != null)
+				options.Package.Cleanup = this.Cleanup.Value;
+
+			return options;
+		}
+
 		protected override void ProcessRecord()
 		{
 			try
 			{
-				this.PackageTransformer.Transform(this.Cleanup, this.Destination, this.FileToTransformPatterns, this.PathToDeletePatterns, this.Source, this.TransformationNames);
+				this.PackageTransformer.Transform(this.Destination, this.FileToTransformPatterns, this.PathToDeletePatterns, this.Source, this.TransformationNames, this.CreateOptions());
 			}
 			catch(MissingMethodException missingMethodException)
 			{

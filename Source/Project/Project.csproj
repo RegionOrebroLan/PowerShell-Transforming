@@ -25,7 +25,7 @@
 		<PackageReference Include="PowerShellStandard.Library" Version="5.1.1">
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="RegionOrebroLan.Transforming" Version="2.1.0" />
+		<PackageReference Include="RegionOrebroLan.Transforming" Version="3.0.0" />
 	</ItemGroup>
 	<Target Name="AdditionalCleanup" AfterTargets="Clean" DependsOnTargets="EnsureProperties">
 		<ItemGroup>
