@@ -11,9 +11,9 @@ PowerShell commands for json-, package- and xml-transformation. This is, from ve
 #### 1.1.1 JSON-transform
 
     New-FileTransform `
-        -Destination "C:\Data\Transforms\Out\AppSettings.json" `
-        -Source "C:\Data\Transforms\In\AppSettings.json" `
-        -Transformation "C:\Data\Transforms\In\AppSettings.Transformation.json";
+        -Destination "C:\Data\Transforms\Out\appsettings.json" `
+        -Source "C:\Data\Transforms\In\appsettings.json" `
+        -Transformation "C:\Data\Transforms\In\appsettings.Transformation.json";
 
 #### 1.1.2 XML-transform
 
@@ -42,7 +42,7 @@ Patterns with absolute paths does not result in any matches.
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
-        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
+        -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
@@ -51,7 +51,7 @@ Patterns with absolute paths does not result in any matches.
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
-        -PathToDeletePatterns "**/Directory-To-Delete/**", "**/File-To-Delete.*" `
+        -PathToDeletePatterns "**/Directory-to-delete/**", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
@@ -60,7 +60,7 @@ Patterns with absolute paths does not result in any matches.
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package.zip" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
-        -PathToDeletePatterns "**/Directory-To-Delete/*", "**/File-To-Delete.*" `
+        -PathToDeletePatterns "**/Directory-to-delete/*", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
@@ -69,7 +69,7 @@ Patterns with absolute paths does not result in any matches.
     New-PackageTransform `
         -Destination "C:\Data\Transforms\Out\Package" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
-        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
+        -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
@@ -81,7 +81,7 @@ The actual transforming is done under the %temp%-directory. The "Cleanup" parame
 		-Cleanup false `
         -Destination "C:\Data\Transforms\Out\Package" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
-        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
+        -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test";
 
