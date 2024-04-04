@@ -73,6 +73,18 @@ Patterns with absolute paths does not result in any matches.
         -Source "C:\Data\Transforms\In\Package.zip" `
         -TransformationNames "Release", "Test";
 
+#### 1.2.6 Cleanup parameter
+
+The actual transforming is done under the %temp%-directory. The "Cleanup" parameter (defaults to true) is for removing the temporary transform-directories or not.
+
+    New-PackageTransform `
+		-Cleanup false `
+        -Destination "C:\Data\Transforms\Out\Package" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-To-Delete/**/*", "**/File-To-Delete.*" `
+        -Source "C:\Data\Transforms\In\Package" `
+        -TransformationNames "Release", "Test";
+
 ### 1.3 Common
 
 All the commands above also have the parameter **-AvoidByteOrderMark true/false**. The default value for this parameter is:
