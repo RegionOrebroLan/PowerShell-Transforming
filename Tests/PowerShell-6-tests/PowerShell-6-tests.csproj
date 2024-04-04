@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>PowerShell6Tests</RootNamespace>
+		<RootNamespace>IntegrationTests</RootNamespace>
 		<TargetFrameworks>net5.0;net6.0;net7.0;netcoreapp3.1</TargetFrameworks>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.7" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="../Integration-tests/Integration-tests.csproj" />
-	</ItemGroup>
-	<ItemGroup>
+		<Compile Exclude="../PowerShell-5-tests/obj/**/*" Include="../PowerShell-5-tests/**/*.cs">
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Compile>
 		<Compile Remove="Test-output/**/*" />
 		<Content Remove="Test-output/**/*" />
 		<None Remove="Test-output/**/*" />

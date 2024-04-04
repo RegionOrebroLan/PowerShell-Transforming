@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>PowerShell5Tests</RootNamespace>
+		<RootNamespace>IntegrationTests</RootNamespace>
 		<TargetFramework>net462</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="../Integration-tests/Integration-tests.csproj" />
-	</ItemGroup>
-	<ItemGroup>
+		<Folder Include="Resources/NewPackageTransformCommandTest/Empty" />
 		<Compile Remove="Test-output/**/*" />
 		<Content Remove="Test-output/**/*" />
 		<None Remove="Test-output/**/*" />
 		<None Include="Test-output/ReadMe.md" />
 	</ItemGroup>
+	<Target Name="EnsureEmptyDirectory" BeforeTargets="BeforeBuild">
+		<MakeDir Condition="!Exists('%(Folder.FullPath)')" Directories="%(Folder.FullPath)" />
+	</Target>
 </Project>

@@ -3,7 +3,7 @@ namespace IntegrationTests.Fixtures
 	/// <summary>
 	/// https://xunit.net/docs/shared-context
 	/// </summary>
-	public abstract class Fixture : IDisposable
+	public class Fixture : IDisposable
 	{
 		#region Fields
 
@@ -19,7 +19,7 @@ namespace IntegrationTests.Fixtures
 			{
 				if(this._outputDirectoryPath == null)
 				{
-					var path = Path.Combine(Global.OutputDirectory.FullName, $"{this.OutputDirectoryPrefix} - {Environment.Version}");
+					var path = Path.Combine(Global.OutputDirectory.FullName, Environment.Version.ToString());
 
 					if(!Directory.Exists(path))
 						Directory.CreateDirectory(path);
@@ -30,8 +30,6 @@ namespace IntegrationTests.Fixtures
 				return this._outputDirectoryPath;
 			}
 		}
-
-		protected abstract string OutputDirectoryPrefix { get; }
 
 		#endregion
 

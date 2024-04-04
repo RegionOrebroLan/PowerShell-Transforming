@@ -30,7 +30,7 @@ namespace IntegrationTests
 		{
 			var baseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 
-			return new DirectoryInfo(Path.Combine(baseDirectory.Parent!.Parent!.Parent!.Parent!.FullName, "Integration-tests", "Resources"));
+			return new DirectoryInfo(Path.Combine(baseDirectory.Parent!.Parent!.Parent!.Parent!.FullName, "PowerShell-5-tests", "Resources"));
 		}
 
 		public static string GetUniqueSuffix()
