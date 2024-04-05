@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Management.Automation;
+using RegionOrebroLan.PowerShell.Transforming.Commands;
 
 namespace IntegrationTests
 {
@@ -38,7 +38,7 @@ namespace IntegrationTests
 			return $"-{Guid.NewGuid().ToString().Replace("-", string.Empty)}";
 		}
 
-		public static void InvokeCommand(Cmdlet command)
+		public static void InvokeCommand(ICommand command)
 		{
 			if(command == null)
 				throw new ArgumentNullException(nameof(command));
