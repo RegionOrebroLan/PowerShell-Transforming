@@ -19,6 +19,15 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 			return Scope.Instance;
 		}
 
+		protected internal virtual InformationRecord CreateInformationRecord(LogLevel logLevel, string message)
+		{
+			var informationRecord = new InformationRecord(message, this.Cmdlet?.ToString());
+
+			informationRecord.Tags.Add(logLevel.ToString());
+
+			return informationRecord;
+		}
+
 		public virtual bool IsEnabled(LogLevel logLevel)
 		{
 			return true;
@@ -29,25 +38,29 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 			if(this.Cmdlet == null)
 				return;
 
+			var message = $"{logLevel}-log ({eventId}): {formatter(state, exception)}";
+
 			switch(logLevel)
 			{
 				case LogLevel.Debug:
-					this.Cmdlet.WriteDebug("Debug");
+					this.Cmdlet.WriteDebug(message);
 					break;
 				case LogLevel.Critical:
 				case LogLevel.Error:
-					this.Cmdlet.WriteError(new ErrorRecord(exception, eventId.Name, ErrorCategory.NotSpecified, this.Cmdlet));
+					//// this.Cmdlet.WriterError, commented out below, seems to throw the exception. So we use this.Cmdlet.WriteInformation instead.
+					// this.Cmdlet.WriteError(new ErrorRecord(new Exception(message, exception), eventId.ToString(), ErrorCategory.NotSpecified, this.Cmdlet));
+					this.Cmdlet.WriteInformation(this.CreateInformationRecord(logLevel, message));
 					break;
 				case LogLevel.Information:
-					this.Cmdlet.WriteInformation(null, null);
+					this.Cmdlet.WriteInformation(this.CreateInformationRecord(logLevel, message));
 					break;
 				case LogLevel.None:
 					break;
 				case LogLevel.Trace:
-					this.Cmdlet.WriteVerbose("Trace");
+					this.Cmdlet.WriteVerbose(message);
 					break;
 				case LogLevel.Warning:
-					this.Cmdlet.WriteWarning("Warning");
+					this.Cmdlet.WriteWarning(message);
 					break;
 				default:
 					break;
