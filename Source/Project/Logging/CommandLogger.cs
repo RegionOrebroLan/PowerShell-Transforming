@@ -30,7 +30,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 
 		protected internal virtual string CreateMessage<TState>(EventId eventId, Exception exception, Func<TState, Exception, string> formatter, LogLevel logLevel, TState state)
 		{
-			return $"{logLevel}-log ({eventId}): {formatter(state, exception)}";
+			return $"{logLevel}-log ({eventId}): {formatter(state, exception)}{(exception != null ? $" -> {exception}" : null)}";
 		}
 
 		public virtual bool IsEnabled(LogLevel logLevel)
