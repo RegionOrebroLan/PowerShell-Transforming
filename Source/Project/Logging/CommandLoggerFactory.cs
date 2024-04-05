@@ -1,14 +1,14 @@
 using System.Collections.Concurrent;
-using System.Management.Automation;
 using Microsoft.Extensions.Logging;
+using RegionOrebroLan.PowerShell.Transforming.Commands;
 
 namespace RegionOrebroLan.PowerShell.Transforming.Logging
 {
-	public class CommandLoggerFactory(Cmdlet command) : ILoggerFactory
+	public class CommandLoggerFactory(ICommand command) : ILoggerFactory
 	{
 		#region Properties
 
-		public virtual Cmdlet Command { get; } = command ?? throw new ArgumentNullException(nameof(command));
+		public virtual ICommand Command { get; } = command ?? throw new ArgumentNullException(nameof(command));
 		protected internal virtual ConcurrentDictionary<string, ILogger> Loggers { get; } = new(StringComparer.OrdinalIgnoreCase);
 
 		#endregion

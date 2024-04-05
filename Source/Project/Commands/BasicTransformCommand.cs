@@ -4,7 +4,7 @@ using IServiceProvider = RegionOrebroLan.PowerShell.Transforming.DependencyInjec
 
 namespace RegionOrebroLan.PowerShell.Transforming.Commands
 {
-	public abstract class BasicTransformCommand(IServiceProvider serviceProvider) : Cmdlet
+	public abstract class BasicTransformCommand(IServiceProvider serviceProvider) : BasicCommand
 	{
 		#region Fields
 

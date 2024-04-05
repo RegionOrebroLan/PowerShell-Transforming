@@ -1,6 +1,6 @@
-using System.Management.Automation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RegionOrebroLan.PowerShell.Transforming.Commands;
 using RegionOrebroLan.PowerShell.Transforming.Configuration;
 using RegionOrebroLan.PowerShell.Transforming.Logging;
 using RegionOrebroLan.Transforming;
@@ -40,7 +40,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.DependencyInjection
 			return new FileTransformerFactory(this.FileSystem, loggerFactory, this.OptionsMonitor);
 		}
 
-		public virtual ILoggerFactory GetLoggerFactory(Cmdlet command)
+		public virtual ILoggerFactory GetLoggerFactory(ICommand command)
 		{
 			if(command == null)
 				throw new ArgumentNullException(nameof(command));
