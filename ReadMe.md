@@ -108,9 +108,21 @@ At the moment we get the following warning (PowerShell-7-tests):
 
 Haven't investigated it further.
 
-## 3 Deployment/installation
+## 3 Tests
 
-### 3.1 PowerShell-Gallery
+The tests in this solution are a mix of integration- and unit-tests together.
+
+### 3.1 Links
+
+- Google: [icommandruntime powershell testing](https://www.google.com/search?q=icommandruntime+powershell+testing)
+- [Unit Testing Powershell Cmdlets in C#](https://fgimian.github.io/unit-testing-powershell-cmdlets-in-c-sharp/)
+- [Testing PowerShell cmdlets written in C#](https://pawelszczygielski.pl/2021/05/06/testing-powershell-cmdlets-written-in-c)
+- [PowerShell Cmdlet tests](https://github.com/deadlydog/PowerShellCmdletInCSharpExample)
+- [PowerShell testing in C#](https://gist.github.com/DigitalAXPP/935255e8ec984f3e24245386f491bcf1)
+
+## 4 Deployment/installation
+
+### 4.1 PowerShell-Gallery
 
 If you want to set up a local PowerShell-Gallery to test with:
 
@@ -140,7 +152,7 @@ More information:
 
 - [PowerShellGet](https://learn.microsoft.com/en-us/powershell/module/powershellget#powershellget)
 
-### 3.2 Install
+### 4.2 Install
 
 1. Download this repository and build.
 2. Run **Publish-Module.ps1** in the output-directory (bin\Release).
@@ -158,7 +170,7 @@ To uninstall the module:
 
     Uninstall-Module "RegionOrebroLan.Transforming";
 
-### 3.3 Other
+### 4.3 Other
 
 To see if anything is installed from your local PowerShell-repository:
 
@@ -172,7 +184,7 @@ The files in [.powershell-repository](/.powershell-repository):
 
 give warnings but it seem to work anyhow.
 
-## 4 Information
+## 5 Information
 
 - [How to Package and Distribute PowerShell Cmdlets, Functions, and Scripts](http://get-powershell.com/post/2011/04/04/How-to-Package-and-Distribute-PowerShell-Cmdlets-Functions-and-Scripts.aspx)
 - [Using C# to Create PowerShell Cmdlets: The Basics](https://www.red-gate.com/simple-talk/dotnet/net-development/using-c-to-create-powershell-cmdlets-the-basics/)
@@ -182,7 +194,7 @@ give warnings but it seem to work anyhow.
 - [Google: powershell cmdlet unit test](https://www.google.com/search?q=powershell+cmdlet+unit+test)
 - [Google: publish-module dll cmdlet](https://www.google.com/search?q=publish-module+dll+cmdlet)
 
-### 4.1 Portable modules
+### 5.1 Portable modules
 
 - [Portable Modules](https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/writing-portable-modules)
 - [Create and test PowerShell Core cmdlets in C#](https://blog.danskingdom.com/Create-and-test-PowerShell-Core-cmdlets-in-CSharp/)
