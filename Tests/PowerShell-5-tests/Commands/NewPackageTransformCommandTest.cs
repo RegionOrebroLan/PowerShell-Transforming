@@ -1,9 +1,9 @@
 using System.IO.Compression;
-using IntegrationTests.Fixtures;
-using IntegrationTests.Helpers;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
+using Tests.Fixtures;
+using Tests.Helpers;
 
-namespace IntegrationTests.Commands
+namespace Tests.Commands
 {
 	[Collection(FixtureCollection.Name)]
 	public class NewPackageTransformCommandTest(Fixture fixture)

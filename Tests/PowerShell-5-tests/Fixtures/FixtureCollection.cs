@@ -1,4 +1,4 @@
-namespace IntegrationTests.Fixtures
+namespace Tests.Fixtures
 {
 	[CollectionDefinition(Name)]
 	public class FixtureCollection : ICollectionFixture<Fixture>

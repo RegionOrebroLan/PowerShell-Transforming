@@ -1,7 +1,7 @@
 using System.Collections;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 
-namespace IntegrationTests
+namespace Tests
 {
 	public static class Global
 	{

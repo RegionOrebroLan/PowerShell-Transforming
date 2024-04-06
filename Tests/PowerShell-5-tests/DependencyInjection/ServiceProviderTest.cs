@@ -4,7 +4,7 @@ using RegionOrebroLan.PowerShell.Transforming.DependencyInjection;
 using RegionOrebroLan.PowerShell.Transforming.Logging;
 using RegionOrebroLan.Transforming;
 
-namespace IntegrationTests.DependencyInjection
+namespace Tests.DependencyInjection
 {
 	public class ServiceProviderTest
 	{

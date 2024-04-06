@@ -1,6 +1,6 @@
 using RegionOrebroLan.PowerShell.Transforming.Configuration;
 
-namespace IntegrationTests.Configuration
+namespace Tests.Configuration
 {
 	public class OptionsMonitorTest
 	{

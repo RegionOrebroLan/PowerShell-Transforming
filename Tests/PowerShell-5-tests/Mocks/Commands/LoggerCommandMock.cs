@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 using IServiceProvider = RegionOrebroLan.PowerShell.Transforming.DependencyInjection.IServiceProvider;
 
-namespace IntegrationTests.Mocks.Commands
+namespace Tests.Mocks.Commands
 {
 	public class LoggerCommandMock(IServiceProvider serviceProvider) : ICommand
 	{

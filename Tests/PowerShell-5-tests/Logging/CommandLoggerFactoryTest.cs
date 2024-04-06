@@ -2,7 +2,7 @@ using Moq;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 using RegionOrebroLan.PowerShell.Transforming.Logging;
 
-namespace IntegrationTests.Logging
+namespace Tests.Logging
 {
 	public class CommandLoggerFactoryTest
 	{

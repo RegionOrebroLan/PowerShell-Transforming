@@ -1,7 +1,7 @@
-using IntegrationTests.Fixtures;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
+using Tests.Fixtures;
 
-namespace IntegrationTests.Commands
+namespace Tests.Commands
 {
 	[Collection(FixtureCollection.Name)]
 	public class NewFileTransformCommandTest(Fixture fixture)

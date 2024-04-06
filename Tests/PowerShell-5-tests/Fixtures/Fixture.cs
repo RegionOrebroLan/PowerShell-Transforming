@@ -1,4 +1,4 @@
-namespace IntegrationTests.Fixtures
+namespace Tests.Fixtures
 {
 	/// <summary>
 	/// https://xunit.net/docs/shared-context

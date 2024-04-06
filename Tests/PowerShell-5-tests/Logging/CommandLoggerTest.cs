@@ -1,8 +1,8 @@
-using IntegrationTests.Mocks.Commands;
 using Microsoft.Extensions.Logging;
 using RegionOrebroLan.PowerShell.Transforming.Logging;
+using Tests.Mocks.Commands;
 
-namespace IntegrationTests.Logging
+namespace Tests.Logging
 {
 	public class CommandLoggerTest
 	{
