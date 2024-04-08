@@ -35,8 +35,14 @@ namespace Tests.Helpers
 
 		#region Methods
 
-		public virtual bool Equals(string x, string y)
+		public virtual bool Equals(string? x, string? y)
 		{
+			if(x == null)
+				return y == null;
+
+			if(y == null)
+				return false;
+
 			var firstRelativePath = this.GetRelativePath(x);
 			var secondRelativePath = this.GetRelativePath(y);
 
@@ -74,7 +80,7 @@ namespace Tests.Helpers
 
 		protected internal virtual string GetRelativePath(string path)
 		{
-			return path?.ToUpperInvariant().Replace(this.ActualDirectoryPath.ToUpperInvariant(), string.Empty).Replace(this.ExpectedDirectoryPath.ToUpperInvariant(), string.Empty);
+			return path.ToUpperInvariant().Replace(this.ActualDirectoryPath.ToUpperInvariant(), string.Empty).Replace(this.ExpectedDirectoryPath.ToUpperInvariant(), string.Empty);
 		}
 
 		#endregion

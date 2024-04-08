@@ -7,7 +7,7 @@ namespace Tests.Fixtures
 	{
 		#region Fields
 
-		private string _outputDirectoryPath;
+		private string? _outputDirectoryPath;
 
 		#endregion
 
@@ -44,7 +44,7 @@ namespace Tests.Fixtures
 				{
 					try
 					{
-						Directory.Delete(this._outputDirectoryPath, true);
+						Directory.Delete(this._outputDirectoryPath ?? string.Empty, true);
 						break;
 					}
 					catch

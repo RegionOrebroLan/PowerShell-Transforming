@@ -20,36 +20,18 @@ namespace Tests.Configuration
 		}
 
 		[Fact]
-		public async Task Get_IfTheNameParameterIsAnEmptyString_ShouldReturnTheCurrentValueInstance()
+		public async Task Get_ShouldReturnTheCurrentValueInstance()
 		{
 			await Task.CompletedTask;
 
 			var optionsMonitor = new OptionsMonitor();
-			var options = optionsMonitor.Get(string.Empty);
-			Assert.NotNull(options);
-			Assert.True(ReferenceEquals(options, optionsMonitor.CurrentValue));
-		}
 
-		[Fact]
-		public async Task Get_IfTheNameParameterIsNeitherNullNorEmpty_ShouldReturnNull()
-		{
-			await Task.CompletedTask;
-
-			var optionsMonitor = new OptionsMonitor();
-			Assert.Null(optionsMonitor.Get(" "));
-			Assert.Null(optionsMonitor.Get("a"));
-			Assert.Null(optionsMonitor.Get("Something"));
-		}
-
-		[Fact]
-		public async Task Get_IfTheNameParameterIsNull_ShouldReturnTheCurrentValueInstance()
-		{
-			await Task.CompletedTask;
-
-			var optionsMonitor = new OptionsMonitor();
-			var options = optionsMonitor.Get(null);
-			Assert.NotNull(options);
-			Assert.True(ReferenceEquals(options, optionsMonitor.CurrentValue));
+			foreach(var name in new[] { null, string.Empty, " ", "a", "Something" })
+			{
+				var options = optionsMonitor.Get(name);
+				Assert.NotNull(options);
+				Assert.True(ReferenceEquals(options, optionsMonitor.CurrentValue));
+			}
 		}
 
 		[Fact]

@@ -10,7 +10,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 	{
 		#region Fields
 
-		private IPackageTransformer _packageTransformer;
+		private IPackageTransformer? _packageTransformer;
 
 		#endregion
 
@@ -26,15 +26,15 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		public virtual bool? Cleanup { get; set; }
 
 		[Parameter(Position = 2)]
-		public virtual string[] FileToTransformPatterns { get; set; }
+		public virtual string[]? FileToTransformPatterns { get; set; }
 
 		protected internal virtual IPackageTransformer PackageTransformer => this._packageTransformer ??= this.ServiceProvider.GetPackageTransformer(this.ServiceProvider.GetLoggerFactory(this));
 
 		[Parameter(Position = 4)]
-		public virtual string[] PathToDeletePatterns { get; set; }
+		public virtual string[]? PathToDeletePatterns { get; set; }
 
 		[Parameter(Position = 3)]
-		public virtual string[] TransformationNames { get; set; }
+		public virtual string[]? TransformationNames { get; set; }
 
 		#endregion
 

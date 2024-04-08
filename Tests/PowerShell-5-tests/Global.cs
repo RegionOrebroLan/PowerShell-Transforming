@@ -43,7 +43,7 @@ namespace Tests
 			if(command == null)
 				throw new ArgumentNullException(nameof(command));
 
-			IEnumerator result = null;
+			IEnumerator? result = null;
 
 			try
 			{

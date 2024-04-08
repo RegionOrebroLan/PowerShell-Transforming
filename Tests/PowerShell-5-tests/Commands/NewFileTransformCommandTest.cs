@@ -24,7 +24,7 @@ namespace Tests.Commands
 			return Global.GetResourcePath(ResolvePaths(paths));
 		}
 
-		private static void Invoke(string destination, string source, string transformation)
+		private static void Invoke(string? destination, string? source, string? transformation)
 		{
 			Global.InvokeCommand(new NewFileTransformCommand
 			{

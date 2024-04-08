@@ -13,12 +13,12 @@ namespace RegionOrebroLan.PowerShell.Transforming.Configuration
 
 		#region Methods
 
-		public TransformingOptions Get(string name)
+		public TransformingOptions Get(string? name)
 		{
-			return string.IsNullOrEmpty(name) ? this.CurrentValue : null;
+			return this.CurrentValue;
 		}
 
-		public IDisposable OnChange(Action<TransformingOptions, string> listener)
+		public IDisposable? OnChange(Action<TransformingOptions, string?> listener)
 		{
 			return null;
 		}

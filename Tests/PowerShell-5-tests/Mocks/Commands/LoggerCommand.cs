@@ -9,9 +9,9 @@ namespace Tests.Mocks.Commands
 	{
 		#region Fields
 
-		private ILogger _logger;
-		private ILoggerFactory _loggerFactory;
-		private Lazy<Action> _processRecordAction;
+		private ILogger? _logger;
+		private ILoggerFactory? _loggerFactory;
+		private Lazy<Action>? _processRecordAction;
 
 		#endregion
 

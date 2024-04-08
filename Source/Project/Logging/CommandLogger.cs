@@ -22,13 +22,13 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 
 		protected internal virtual InformationRecord CreateInformationRecord(LogLevel logLevel, string message)
 		{
-			var informationRecord = new InformationRecord(message, this.Command?.ToString());
+			var informationRecord = new InformationRecord(message, this.Command.ToString());
 
 			informationRecord.Tags.Add(logLevel.ToString());
 			return informationRecord;
 		}
 
-		protected internal virtual string CreateMessage<TState>(EventId eventId, Exception exception, Func<TState, Exception, string> formatter, LogLevel logLevel, TState state)
+		protected internal virtual string CreateMessage<TState>(EventId eventId, Exception? exception, Func<TState, Exception?, string> formatter, LogLevel logLevel, TState state)
 		{
 			return $"{logLevel}-log ({eventId}): {formatter(state, exception)}{(exception != null ? $" -> {exception}" : null)}";
 		}
@@ -38,11 +38,8 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 			return true;
 		}
 
-		public virtual void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+		public virtual void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
 		{
-			if(this.Command == null)
-				return;
-
 			var message = this.CreateMessage(eventId, exception, formatter, logLevel, state);
 
 			switch(logLevel)

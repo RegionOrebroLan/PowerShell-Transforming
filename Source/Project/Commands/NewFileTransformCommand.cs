@@ -9,7 +9,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 	{
 		#region Fields
 
-		private IFileTransformerFactory _fileTransformerFactory;
+		private IFileTransformerFactory? _fileTransformerFactory;
 
 		#endregion
 
@@ -24,7 +24,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		protected internal virtual IFileTransformerFactory FileTransformerFactory => this._fileTransformerFactory ??= this.ServiceProvider.GetFileTransformerFactory(this.ServiceProvider.GetLoggerFactory(this));
 
 		[Parameter(Position = 2, Mandatory = true)]
-		public virtual string Transformation { get; set; }
+		public virtual string? Transformation { get; set; }
 
 		#endregion
 

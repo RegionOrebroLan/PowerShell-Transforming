@@ -8,7 +8,7 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		#region Properties
 
 		CommandOrigin CommandOrigin { get; }
-		ICommandRuntime CommandRuntime { get; set; }
+		ICommandRuntime? CommandRuntime { get; set; }
 		bool Stopping { get; }
 
 		#endregion

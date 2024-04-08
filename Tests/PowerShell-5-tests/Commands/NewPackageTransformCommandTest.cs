@@ -31,7 +31,7 @@ namespace Tests.Commands
 			return Global.GetResourcePath(ResolvePaths(paths));
 		}
 
-		private static void Invoke(string destination, string[] fileToTransformPatterns, string[] pathToDeletePatterns, string source, string[] transformationNames)
+		private static void Invoke(string? destination, string[]? fileToTransformPatterns, string[]? pathToDeletePatterns, string? source, string[]? transformationNames)
 		{
 			Global.InvokeCommand(new NewPackageTransformCommand
 			{

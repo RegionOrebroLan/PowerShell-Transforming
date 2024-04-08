@@ -10,9 +10,9 @@ namespace Tests.Mocks.Commands
 	{
 		#region Fields
 
-		private ILogger _logger;
-		private ILoggerFactory _loggerFactory;
-		private Lazy<Action> _processRecordAction;
+		private ILogger? _logger;
+		private ILoggerFactory? _loggerFactory;
+		private Lazy<Action>? _processRecordAction;
 
 		#endregion
 
@@ -25,7 +25,7 @@ namespace Tests.Mocks.Commands
 		#region Properties
 
 		public virtual CommandOrigin CommandOrigin { get; set; }
-		public virtual ICommandRuntime CommandRuntime { get; set; }
+		public virtual ICommandRuntime? CommandRuntime { get; set; }
 		public virtual IList<string> Debug { get; } = [];
 		public virtual IList<InformationRecord> Information { get; } = [];
 		public virtual ILogger Logger => this._logger ??= this.LoggerFactory.CreateLogger(this.GetType());

@@ -18,13 +18,13 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 		public virtual bool? AvoidByteOrderMark { get; set; }
 
 		[Parameter(Position = 1, Mandatory = true)]
-		public virtual string Destination { get; set; }
+		public virtual string? Destination { get; set; }
 
 		protected internal virtual string MissingMethodExceptionMessage => _missingMethodExceptionMessage;
 		protected internal virtual IServiceProvider ServiceProvider => serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
 		[Parameter(Position = 0, Mandatory = true)]
-		public virtual string Source { get; set; }
+		public virtual string? Source { get; set; }
 
 		#endregion
 
