@@ -1,5 +1,7 @@
+using System.Management.Automation;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 using Tests.Fixtures;
+using Tests.Helpers.Management.Automation.Extensions;
 
 namespace Tests.Commands
 {
@@ -14,6 +16,21 @@ namespace Tests.Commands
 
 		#region Methods
 
+		private static NewFileTransformCommand CreateCommand(string? destination, string? source, string? transformation, ICommandRuntime? commandRuntime = null)
+		{
+			var command = new NewFileTransformCommand
+			{
+				CommandRuntime = commandRuntime,
+				Destination = destination,
+				Source = source,
+				Transformation = transformation
+			};
+
+			command.PrepareForTest();
+
+			return command;
+		}
+
 		private string GetOutputPath(params string[] paths)
 		{
 			return this._fixture.GetOutputPath(paths);
@@ -24,14 +41,11 @@ namespace Tests.Commands
 			return Global.GetResourcePath(ResolvePaths(paths));
 		}
 
-		private static void Invoke(string? destination, string? source, string? transformation)
+		private static object[] Invoke(string? destination, string? source, string? transformation, ICommandRuntime? commandRuntime = null)
 		{
-			Global.InvokeCommand(new NewFileTransformCommand
-			{
-				Destination = destination,
-				Source = source,
-				Transformation = transformation
-			});
+			var command = CreateCommand(destination, source, transformation, commandRuntime);
+
+			return command.Invoke<object>().ToArray();
 		}
 
 		[Fact]

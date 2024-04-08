@@ -1,6 +1,3 @@
-using System.Collections;
-using RegionOrebroLan.PowerShell.Transforming.Commands;
-
 namespace Tests
 {
 	public static class Global
@@ -36,26 +33,6 @@ namespace Tests
 		public static string GetUniqueSuffix()
 		{
 			return $"-{Guid.NewGuid().ToString().Replace("-", string.Empty)}";
-		}
-
-		public static void InvokeCommand(ICommand command)
-		{
-			if(command == null)
-				throw new ArgumentNullException(nameof(command));
-
-			IEnumerator? result = null;
-
-			try
-			{
-				result = command.Invoke().GetEnumerator();
-
-				result.MoveNext();
-			}
-			finally
-			{
-				if(result is IDisposable disposable)
-					disposable.Dispose();
-			}
 		}
 
 		#endregion

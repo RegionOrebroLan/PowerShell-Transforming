@@ -1,6 +1,9 @@
+using System.Management.Automation;
 using Microsoft.Extensions.Logging;
 using RegionOrebroLan.PowerShell.Transforming.Logging;
+using Tests.Helpers.Management.Automation.Extensions;
 using Tests.Mocks.Commands;
+using Tests.Mocks.Management.Automation;
 
 namespace Tests.Logging
 {
@@ -8,31 +11,61 @@ namespace Tests.Logging
 	{
 		#region Methods
 
+		private static CommandMock CreateCommand(ICommandRuntime? commandRuntime = null)
+		{
+			var command = new CommandMock
+			{
+				CommandRuntime = commandRuntime
+			};
+
+			command.PrepareForTest();
+
+			return command;
+		}
+
 		[Fact]
 		public async Task Log_ShouldUseTheCommandToWrite()
 		{
 			await Task.CompletedTask;
 
-			// This first test section is for verifying that no exception is thrown.
-			var loggerCommand = new LoggerCommand();
-			var commandLoggerFactory = new CommandLoggerFactory(loggerCommand);
-			var commandLogger = commandLoggerFactory.CreateLogger(loggerCommand.GetType());
-			Assert.NotNull(commandLogger);
-			Global.InvokeCommand(loggerCommand);
+			var commandRuntime = new CommandRuntime2Mock();
 
-			var loggerCommandMock = new LoggerCommandMock();
-			commandLoggerFactory = new CommandLoggerFactory(loggerCommandMock);
-			commandLogger = commandLoggerFactory.CreateLogger(loggerCommandMock.GetType());
-			Assert.NotNull(commandLogger);
-			Assert.Empty(loggerCommandMock.Debug);
-			Assert.Empty(loggerCommandMock.Information);
-			Assert.Empty(loggerCommandMock.Trace);
-			Assert.Empty(loggerCommandMock.Warning);
-			Global.InvokeCommand(loggerCommandMock);
-			Assert.Equal(2, loggerCommandMock.Debug.Count);
-			Assert.Equal(6, loggerCommandMock.Information.Count);
-			Assert.Equal(2, loggerCommandMock.Trace.Count);
-			Assert.Equal(2, loggerCommandMock.Warning.Count);
+			var command = CreateCommand(commandRuntime);
+			var commandLoggerFactory = new CommandLoggerFactory(command);
+			var commandLogger = commandLoggerFactory.CreateLogger(command.GetType());
+
+			commandLogger.LogCritical("Critical log");
+			commandLogger.LogCritical(new InvalidOperationException("Critical exception"), "Critical log");
+			commandLogger.LogDebug("Debug log");
+			commandLogger.LogDebug(new InvalidOperationException("Debug exception"), "Debug log");
+			commandLogger.LogError("Error log");
+			commandLogger.LogError(new InvalidOperationException("Error exception"), "Error log");
+			commandLogger.LogInformation("Information log");
+			commandLogger.LogInformation(new InvalidOperationException("Information exception"), "Information log");
+			commandLogger.LogTrace("Trace log");
+			commandLogger.LogTrace(new InvalidOperationException("Trace exception"), "Trace log");
+			commandLogger.LogWarning("Warning log");
+			commandLogger.LogWarning(new InvalidOperationException("Warning exception"), "Warning log");
+
+			Assert.Equal(2, commandRuntime.Debugs.Count);
+			Assert.Equal(4, commandRuntime.Errors.Count);
+			Assert.Equal(2, commandRuntime.Informations.Count);
+			Assert.Equal(2, commandRuntime.Verboses.Count);
+			Assert.Equal(2, commandRuntime.Warnings.Count);
+		}
+
+		[Fact]
+		public async Task LogInformation_IfTheCommandRuntimeIsICommandRuntime_ShouldThrowANotImplementedException()
+		{
+			await Task.CompletedTask;
+
+			var commandRuntime = new CommandRuntimeMock();
+
+			var command = CreateCommand(commandRuntime);
+			var commandLoggerFactory = new CommandLoggerFactory(command);
+			var commandLogger = commandLoggerFactory.CreateLogger(command.GetType());
+
+			Assert.Throws<NotImplementedException>(() => commandLogger.LogInformation("Information log"));
 		}
 
 		#endregion

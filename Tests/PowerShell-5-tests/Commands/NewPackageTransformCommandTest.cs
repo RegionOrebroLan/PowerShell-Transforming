@@ -1,7 +1,9 @@
 using System.IO.Compression;
+using System.Management.Automation;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 using Tests.Fixtures;
 using Tests.Helpers.IO;
+using Tests.Helpers.Management.Automation.Extensions;
 
 namespace Tests.Commands
 {
@@ -15,6 +17,23 @@ namespace Tests.Commands
 		#endregion
 
 		#region Methods
+
+		private static NewPackageTransformCommand CreateCommand(string? destination, string[]? fileToTransformPatterns, string[]? pathToDeletePatterns, string? source, string[]? transformationNames, ICommandRuntime? commandRuntime = null)
+		{
+			var command = new NewPackageTransformCommand
+			{
+				CommandRuntime = commandRuntime,
+				Destination = destination,
+				FileToTransformPatterns = fileToTransformPatterns,
+				PathToDeletePatterns = pathToDeletePatterns,
+				Source = source,
+				TransformationNames = transformationNames
+			};
+
+			command.PrepareForTest();
+
+			return command;
+		}
 
 		protected internal virtual IEnumerable<string> GetFileSystemEntries(string path)
 		{
@@ -31,16 +50,11 @@ namespace Tests.Commands
 			return Global.GetResourcePath(ResolvePaths(paths));
 		}
 
-		private static void Invoke(string? destination, string[]? fileToTransformPatterns, string[]? pathToDeletePatterns, string? source, string[]? transformationNames)
+		private static object[] Invoke(string? destination, string[]? fileToTransformPatterns, string[]? pathToDeletePatterns, string? source, string[]? transformationNames, ICommandRuntime? commandRuntime = null)
 		{
-			Global.InvokeCommand(new NewPackageTransformCommand
-			{
-				Destination = destination,
-				FileToTransformPatterns = fileToTransformPatterns,
-				PathToDeletePatterns = pathToDeletePatterns,
-				Source = source,
-				TransformationNames = transformationNames
-			});
+			var command = CreateCommand(destination, fileToTransformPatterns, pathToDeletePatterns, source, transformationNames, commandRuntime);
+
+			return command.Invoke<object>().ToArray();
 		}
 
 		[Fact]
