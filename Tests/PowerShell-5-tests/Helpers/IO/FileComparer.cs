@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Tests.Helpers
+namespace Tests.Helpers.IO
 {
 	public class FileComparer : IEqualityComparer<string>
 	{

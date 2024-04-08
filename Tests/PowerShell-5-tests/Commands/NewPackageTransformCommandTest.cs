@@ -1,7 +1,7 @@
 using System.IO.Compression;
 using RegionOrebroLan.PowerShell.Transforming.Commands;
 using Tests.Fixtures;
-using Tests.Helpers;
+using Tests.Helpers.IO;
 
 namespace Tests.Commands
 {
