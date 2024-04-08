@@ -158,6 +158,22 @@ namespace Tests.Commands
 		}
 
 		[Fact]
+		public async Task ProcessRecord_IfTransformationIsSuccessful_ShouldWriteConfirmation()
+		{
+			await Task.CompletedTask;
+
+			var destination = this.GetOutputPath($"Web{Global.GetUniqueSuffix()}.config");
+			var result = Invoke(destination, GetResourcePath("Web.config"), GetResourcePath("Web.Transformation.config"));
+			Assert.Single(result);
+			Assert.Equal($"The transformation was successful: \"{destination}\"", result[0]);
+
+			destination = this.GetOutputPath($"appsettings{Global.GetUniqueSuffix()}.json");
+			result = Invoke(destination, GetResourcePath("appsettings.json"), GetResourcePath("appsettings.Transformation.json"));
+			Assert.Single(result);
+			Assert.Equal($"The transformation was successful: \"{destination}\"", result[0]);
+		}
+
+		[Fact]
 		public async Task ProcessRecord_ShouldTransformCorrectly()
 		{
 			await Task.CompletedTask;

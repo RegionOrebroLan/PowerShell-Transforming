@@ -35,6 +35,8 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 			try
 			{
 				this.FileTransformerFactory.Create(this.Source).Transform(this.Destination, this.Source, this.Transformation, this.CreateOptions().File);
+
+				this.WriteObject($"The transformation was successful: \"{this.Destination}\"");
 			}
 			catch(MissingMethodException missingMethodException)
 			{

@@ -55,6 +55,8 @@ namespace RegionOrebroLan.PowerShell.Transforming.Commands
 			try
 			{
 				this.PackageTransformer.Transform(this.Destination, this.FileToTransformPatterns, this.PathToDeletePatterns, this.Source, this.TransformationNames, this.CreateOptions());
+
+				this.WriteObject($"The transformation was successful: \"{this.Destination}\"");
 			}
 			catch(MissingMethodException missingMethodException)
 			{

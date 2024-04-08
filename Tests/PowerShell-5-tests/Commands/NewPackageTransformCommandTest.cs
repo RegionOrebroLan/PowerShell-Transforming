@@ -219,6 +219,17 @@ namespace Tests.Commands
 		}
 
 		[Fact]
+		public async Task ProcessRecord_IfTransformationIsSuccessful_ShouldWriteConfirmation()
+		{
+			await Task.CompletedTask;
+
+			var destination = this.GetOutputPath($"Transformed-Package{Global.GetUniqueSuffix()}");
+			var result = Invoke(destination, ["**/*.config*", "**/*.json", "**/*.xml"], ["**/Directory-To-Delete/*", "**/File-To-Delete.*"], GetResourcePath("Package"), ["Release", "Test"]);
+			Assert.Single(result);
+			Assert.Equal($"The transformation was successful: \"{destination}\"", result[0]);
+		}
+
+		[Fact]
 		public async Task ProcessRecord_ShouldTransformWithTheTransformationNamesInTheDeclaredOrderAndNotAlphabetically()
 		{
 			await Task.CompletedTask;
