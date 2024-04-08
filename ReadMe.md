@@ -94,6 +94,36 @@ All the commands above also have the parameter **-AvoidByteOrderMark true/false*
 
 This parameter controls the result of the transformation. If a source file that will be transformed has a BOM (Byte Order Mark) the destination file should also have a BOM. This is not always desired, e.g. on a Linux system. So if the source file has a BOM but the parameter "AvoidByteOrderMark" is set to true, the destination file will not have a BOM.
 
+### 1.4 Logging
+
+This PowerShell-module uses [**.NET-Transforming**](https://github.com/RegionOrebroLan/.NET-Transforming/) that may log information. A [**CommandLogger**](/Source/Project/Logging/CommandLogger.cs#L50) is used to write the logs to the PowerShell-console.
+
+- **LogLevel.Critical** & **LogLevel.Error** write errors (Cmdlet.WriteError).
+- **LogLevel.Debug** write debug (Cmdlet.WriteDebug).
+- **LogLevel.Information** write information (Cmdlet.WriteInformation).
+- **LogLevel.Trace** write verbose (Cmdlet.WriteVerbose).
+- **LogLevel.Warning** write warnings (Cmdlet.WriteWarning).
+
+To write debug logs to the console you need to add the **-Debug** parameter:
+
+    New-FileTransform `
+        -Destination "C:\Data\Transforms\Out\appsettings.json" `
+        -Source "C:\Data\Transforms\In\appsettings.json" `
+        -Transformation "C:\Data\Transforms\In\appsettings.Transformation.json" `
+		-Debug;
+
+To write verbose (trace) logs to the console you need to add the **-Verbose** parameter:
+
+    New-PackageTransform `
+        -Destination "C:\Data\Transforms\Out\Package" `
+        -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
+        -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
+        -Source "C:\Data\Transforms\In\Package" `
+        -TransformationNames "Release", "Test" `
+		-Verbose;
+
+**Note: At the moment [**.NET-Transforming**](https://github.com/RegionOrebroLan/.NET-Transforming/) don't write any logs. The logging functionality is recently implemented.**
+
 ## 2 Development
 
 ### 2.1 Signing
