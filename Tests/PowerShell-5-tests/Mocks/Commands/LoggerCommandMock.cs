@@ -75,9 +75,14 @@ namespace Tests.Mocks.Commands
 
 		public virtual IEnumerable Invoke()
 		{
+			return this.Invoke<object>();
+		}
+
+		public virtual IEnumerable<T> Invoke<T>()
+		{
 			this.ProcessRecord();
 
-			return Enumerable.Empty<object>();
+			return [];
 		}
 
 		protected virtual void ProcessRecord()
