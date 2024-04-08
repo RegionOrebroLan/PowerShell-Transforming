@@ -20,7 +20,12 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 			return Scope.Instance;
 		}
 
-		protected internal virtual InformationRecord CreateInformationRecord(LogLevel logLevel, string message)
+		protected internal virtual ErrorRecord CreateErrorRecord(EventId eventId, Exception? exception, LogLevel logLevel, string? message)
+		{
+			return new ErrorRecord(new Exception(message, exception), eventId.ToString(), ErrorCategory.NotSpecified, this.Command);
+		}
+
+		protected internal virtual InformationRecord CreateInformationRecord(LogLevel logLevel, string? message)
 		{
 			var informationRecord = new InformationRecord(message, this.Command.ToString());
 
@@ -44,14 +49,12 @@ namespace RegionOrebroLan.PowerShell.Transforming.Logging
 
 			switch(logLevel)
 			{
-				case LogLevel.Debug:
-					this.Command.WriteDebug(message);
-					break;
 				case LogLevel.Critical:
 				case LogLevel.Error:
-					//// this.Cmdlet.WriterError, commented out below, seems to throw the exception. So we use this.Cmdlet.WriteInformation instead.
-					// this.Cmdlet.WriteError(new ErrorRecord(new Exception(message, exception), eventId.ToString(), ErrorCategory.NotSpecified, this.Cmdlet));
-					this.Command.WriteInformation(this.CreateInformationRecord(logLevel, message));
+					this.Command.WriteError(this.CreateErrorRecord(eventId, exception, logLevel, message));
+					break;
+				case LogLevel.Debug:
+					this.Command.WriteDebug(message);
 					break;
 				case LogLevel.Information:
 					this.Command.WriteInformation(this.CreateInformationRecord(logLevel, message));
