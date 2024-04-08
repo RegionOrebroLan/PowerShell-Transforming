@@ -192,6 +192,10 @@ Then you can try to install the module:
 
     Install-Module "RegionOrebroLan.Transforming";
 
+or (local)
+
+	Install-Module "RegionOrebroLan.Transforming" -Repository "PowerShell-Transforming";
+
 or save it:
 
     Save-Module -Name "RegionOrebroLan.Transforming" -Path "C:\Data\Saved-PowerShell-Modules";
