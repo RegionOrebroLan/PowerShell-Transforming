@@ -78,7 +78,7 @@ Patterns with absolute paths does not result in any matches.
 The actual transforming is done under the %temp%-directory. The "Cleanup" parameter (defaults to true) is for removing the temporary transform-directories or not.
 
     New-PackageTransform `
-		-Cleanup false `
+        -Cleanup false `
         -Destination "C:\Data\Transforms\Out\Package" `
         -FileToTransformPatterns "**/*.config", "**/*.json", "**/*.xml" `
         -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
@@ -110,7 +110,7 @@ To write debug logs to the console you need to add the **-Debug** parameter:
         -Destination "C:\Data\Transforms\Out\appsettings.json" `
         -Source "C:\Data\Transforms\In\appsettings.json" `
         -Transformation "C:\Data\Transforms\In\appsettings.Transformation.json" `
-		-Debug;
+        -Debug;
 
 To write verbose (trace) logs to the console you need to add the **-Verbose** parameter:
 
@@ -120,7 +120,7 @@ To write verbose (trace) logs to the console you need to add the **-Verbose** pa
         -PathToDeletePatterns "**/Directory-to-delete/**/*", "**/File-to-delete.*" `
         -Source "C:\Data\Transforms\In\Package" `
         -TransformationNames "Release", "Test" `
-		-Verbose;
+        -Verbose;
 
 **Note: At the moment [**.NET-Transforming**](https://github.com/RegionOrebroLan/.NET-Transforming/) don't write any logs. The logging functionality is recently implemented.**
 
