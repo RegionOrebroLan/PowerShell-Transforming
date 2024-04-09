@@ -204,6 +204,18 @@ To uninstall the module:
 
     Uninstall-Module "RegionOrebroLan.Transforming";
 
+#### 4.2.1 Example
+
+Install on a Linux build-agent via cmd.exe on Windows. The scenario is that you have version 2.0.0 installed and you want to install version 2.1.0. You also want to uninstall version 2.0.0 before installing version 2.1.0.
+
+1. Open cmd.exe
+2. `ssh user@build-agent`
+3. `sudo pwsh`
+4. `(Get-InstalledModule RegionOrebroLan.Transforming).InstalledLocation` - should give "/usr/local/share/powershell/Modules/RegionOrebroLan.Transforming/2.0.0" if it was installed with scope "AllUsers"
+5. `Uninstall-Module RegionOrebroLan.Transforming` - if you want to remove previous versions
+6. `Install-Module RegionOrebroLan.Transforming -Scope "AllUsers"`
+7. `(Get-InstalledModule RegionOrebroLan.Transforming).InstalledLocation` - should give "/usr/local/share/powershell/Modules/RegionOrebroLan.Transforming/2.1.0"
+
 ### 4.3 Other
 
 To see if anything is installed from your local PowerShell-repository:
